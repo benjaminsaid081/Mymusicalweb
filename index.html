@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diario Personal | Música, Foto, Cine</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --surface-color: #1e1e1e;
+            --text-main: #e0e0e0;
+            --text-muted: #888;
+            --accent: #007bff;
+            --musica: #1db954;
+            --fotografia: #f5c518;
+            --cine: #e50914;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        header h1 { margin: 0; font-size: 2.5rem; }
+        header p { color: var(--text-muted); }
+
+        .editor {
+            background: var(--surface-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            background: #2a2a2a;
+            border: 1px solid #333;
+            color: white;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover { background: #0056b3; }
+
+        .post {
+            background: var(--surface-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--accent);
+        }
+
+        /* Colores dinámicos por categoría */
+        .post.musica { border-color: var(--musica); }
+        .post.fotografia { border-color: var(--fotografia); }
+        .post.cine { border-color: var(--cine); }
+
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 10px;
+        }
+
+        .post-title { margin: 0; font-size: 1.2rem; }
+        .post-meta { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .post-content { line-height: 1.6; color: #ccc; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Archivo Personal</h1>
+            <p>Música, Fotografía y Cine</p>
+        </header>
+
+        <div class="editor">
+            <input type="text" id="title" placeholder="Título de la publicación..." required>
+            <select id="category">
+                <option value="musica">Música</option>
+                <option value="fotografia">Fotografía</option>
+                <option value="cine">Cine</option>
+            </select>
+            <textarea id="content" rows="5" placeholder="Escribe algo sobre tus proyectos o ideas..." required></textarea>
+            <button onclick="publishPost()">Publicar</button>
+        </div>
+
+        <div id="feed">Cargando publicaciones...</div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script>
+        // 1. Inicializar conexión
+        const supabaseUrl = 'https://mqjtzqmsxcjuliblnxdd.supabase.co/rest/v1/';
+        const supabaseKey = 'sb_publishable_VoPqiTABVoFvU56SslVXZA_La3t13fX';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        const feedEl = document.getElementById('feed');
+
+        // 2. Función para obtener los posts
+        async function fetchPosts() {
+            const { data, error } = await supabase
+                .from('posts')
+                .select('*')
+                .order('created_at', { ascending: false }); // Traer los más recientes primero
+
+            if (error) {
+                console.error('Error al cargar:', error);
+                feedEl.innerHTML = '<p>Error al cargar las publicaciones.</p>';
+                return;
+            }
+
+            feedEl.innerHTML = ''; // Limpiar estado de carga
+            
+            if (data.length === 0) {
+                feedEl.innerHTML = '<p style="text-align:center; color:#888;">Aún no hay publicaciones.</p>';
+                return;
+            }
+
+            // Renderizar cada post en el HTML
+            data.forEach(post => {
+                const date = new Date(post.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
+                const div = document.createElement('div');
+                div.className = `post ${post.category}`;
+                div.innerHTML = `
+                    <div class="post-header">
+                        <h3 class="post-title">${post.title}</h3>
+                        <span class="post-meta">${post.category} • ${date}</span>
+                    </div>
+                    <div class="post-content">${post.content}</div>
+                `;
+                feedEl.appendChild(div);
+            });
+        }
+
+        // 3. Función para enviar un nuevo post
+        async function publishPost() {
+            const titleInput = document.getElementById('title');
+            const categoryInput = document.getElementById('category');
+            const contentInput = document.getElementById('content');
+
+            if (!titleInput.value || !contentInput.value) {
+                alert('El título y el contenido son obligatorios.');
+                return;
+            }
+
+            // Insertar datos a Supabase
+            const { error } = await supabase
+                .from('posts')
+                .insert([
+                    { 
+                        title: titleInput.value, 
+                        category: categoryInput.value, 
+                        content: contentInput.value 
+                    }
+                ]);
+
+            if (error) {
+                console.error('Error al publicar:', error);
+                alert('No se pudo publicar. Revisa la consola.');
+            } else {
+                // Limpiar formulario y recargar el muro
+                titleInput.value = '';
+                contentInput.value = '';
+                fetchPosts();
+            }
+        }
+
+        // Cargar los datos al abrir la página
+        fetchPosts();
+    </script>
+</body>
+</html>
