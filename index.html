@@ -218,17 +218,22 @@
   .post[data-cat="fotografía"]::before{ background:var(--photo); }
   .post[data-cat="cine"]::before{ background:var(--cine); }
 
-  .post-meta{ display:flex; align-items:center; gap:10px; font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:0.5px; color:var(--text-dim); margin-bottom:8px; text-transform:uppercase; }
+  .post-meta{ display:flex; align-items:center; gap:10px; font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:0.5px; color:var(--text-dim); margin-bottom:8px; text-transform:uppercase; flex-wrap:wrap; }
   .post-meta .cat-dot{ width:6px; height:6px; border-radius:50%; }
   .post-meta .cat-dot.música{ background:var(--music); }
   .post-meta .cat-dot.fotografía{ background:var(--photo); }
   .post-meta .cat-dot.cine{ background:var(--cine); }
+  .post-meta .author-link{ color:var(--text); text-decoration:none; font-weight:600; text-transform:none; }
+  .post-meta .author-link:hover{ color:var(--photo); }
 
   .post h3{ font-family:'Fraunces', serif; font-size:20px; font-weight:600; margin:0 0 8px; }
   .post p{ margin:0 0 12px; font-size:14.5px; line-height:1.6; color:#d8d3c9; white-space:pre-wrap; }
   .post img{ width:100%; max-height:420px; object-fit:cover; border-radius:10px; display:block; border:1px solid var(--border); margin-bottom:4px; }
   .video-embed{ position:relative; width:100%; padding-top:56.25%; border-radius:10px; overflow:hidden; border:1px solid var(--border); margin-bottom:12px; background:#000; }
   .video-embed iframe{ position:absolute; inset:0; width:100%; height:100%; border:none; }
+  .video-actions{ display:flex; gap:10px; margin-top:-6px; margin-bottom:12px; }
+  .video-actions a{ font-size:12px; color:var(--photo); text-decoration:none; font-weight:500; }
+  .video-actions a:hover{ text-decoration:underline; }
 
   .post-actions{ display:flex; gap:6px; margin-top:10px; border-top:1px solid var(--border); padding-top:10px; }
   .action-btn{
@@ -277,7 +282,7 @@
   .form-card h2{ font-family:'Fraunces', serif; font-size:22px; margin:0 0 18px; }
   label{ display:block; font-size:11.5px; font-family:'JetBrains Mono', monospace; letter-spacing:0.5px; text-transform:uppercase; color:var(--text-dim); margin:16px 0 8px; }
   label:first-of-type{ margin-top:0; }
-  input[type="text"], input[type="email"], input[type="password"], textarea{
+  input[type="text"], input[type="email"], input[type="password"], input[type="url"], input[type="color"], textarea{
     width:100%; background:var(--bg); border:1px solid var(--border); border-radius:10px;
     color:var(--text); padding:12px 14px; font-size:14.5px; font-family:inherit; resize:vertical;
     transition:border-color .2s ease;
@@ -346,20 +351,52 @@
   .activity-text b{ font-weight:600; }
   .activity-time{ font-size:11.5px; color:var(--text-dim); margin-top:2px; }
 
-  /* ---------- PERFIL ---------- */
-  .profile-card{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:26px; }
-  .profile-head{ display:flex; align-items:center; gap:16px; margin-bottom:18px; }
-  .profile-head .avatar{ width:64px; height:64px; font-size:24px; }
-  .profile-head h2{ font-family:'Fraunces', serif; font-size:22px; margin:0; }
-  .profile-head .handle{ font-size:13px; color:var(--text-dim); font-family:'JetBrains Mono', monospace; }
-  .badge-admin{
-    display:inline-flex; align-items:center; gap:4px; font-size:10.5px; font-weight:700;
-    color:var(--photo); border:1px solid var(--photo); padding:2px 8px; border-radius:999px; margin-top:6px;
-    font-family:'JetBrains Mono', monospace; letter-spacing:0.4px;
+  /* ---------- USUARIOS ---------- */
+  .users-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(200px,1fr)); gap:18px; margin-top:10px; }
+  .user-card{
+    background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    padding:18px; text-align:center; cursor:pointer; transition:transform .2s, border-color .2s;
   }
-  .profile-bio{ font-size:14px; line-height:1.6; color:#d8d3c9; margin:0 0 20px; }
-  .profile-actions{ display:flex; gap:10px; }
-  .profile-actions button{ flex:1; }
+  .user-card:hover{ transform:translateY(-3px); border-color:#3a352f; }
+  .user-card .avatar{ width:60px; height:60px; margin:0 auto 10px; font-size:24px; }
+  .user-card .name{ font-family:'Fraunces', serif; font-size:16px; font-weight:600; }
+  .user-card .handle{ font-size:12px; color:var(--text-dim); font-family:'JetBrains Mono', monospace; }
+  .user-card .bio{ font-size:13px; color:#d8d3c9; margin-top:6px; line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+
+  /* ---------- PERFIL (personalizado) ---------- */
+  .profile-banner{
+    width:100%; height:140px; border-radius:var(--radius) var(--radius) 0 0;
+    background:linear-gradient(135deg, var(--music), var(--cine));
+    position:relative;
+    margin:-26px -26px 0 -26px;
+    overflow:hidden;
+  }
+  .profile-banner img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .profile-card{ padding-top:0; overflow:hidden; }
+  .profile-head{
+    display:flex; align-items:flex-end; gap:16px; padding:0 26px 18px;
+    margin-top:-30px; position:relative; z-index:2;
+  }
+  .profile-head .avatar{ width:72px; height:72px; font-size:28px; border:3px solid var(--surface); }
+  .profile-head .info{ flex:1; }
+  .profile-head .info h2{ font-family:'Fraunces', serif; font-size:22px; margin:0; }
+  .profile-head .info .handle{ font-size:13px; color:var(--text-dim); font-family:'JetBrains Mono', monospace; }
+  .profile-head .info .badge-admin{ display:inline-flex; align-items:center; gap:4px; font-size:10.5px; font-weight:700; color:var(--photo); border:1px solid var(--photo); padding:2px 8px; border-radius:999px; margin-top:4px; font-family:'JetBrains Mono', monospace; letter-spacing:0.4px; }
+  .profile-extra{ display:flex; gap:18px; flex-wrap:wrap; margin:8px 0 12px; font-size:13px; color:var(--text-dim); }
+  .profile-extra svg{ width:14px; height:14px; display:inline-block; vertical-align:middle; margin-right:4px; }
+  .profile-extra a{ color:var(--photo); text-decoration:none; }
+  .profile-extra a:hover{ text-decoration:underline; }
+
+  .profile-form-fields{ margin-top:20px; }
+
+  /* Estilo para "Sobre mí" sin banner */
+  .profile-no-banner .profile-head{
+    margin-top:0;
+    padding-top:18px;
+  }
+  .profile-no-banner .profile-banner{
+    display:none;
+  }
 
   /* ---------- MODAL (auth) ---------- */
   .modal-overlay{
@@ -392,6 +429,38 @@
   }
   .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
   .toast.error{ border-color:var(--danger); color:var(--danger); }
+
+  /* ---------- LANGUAGE SELECTOR ---------- */
+  .lang-selector{
+    position:fixed;
+    top:12px;
+    right:12px;
+    z-index:200;
+    display:flex;
+    gap:6px;
+    background:rgba(23,21,18,0.85);
+    backdrop-filter:blur(6px);
+    padding:6px 10px;
+    border-radius:999px;
+    border:1px solid var(--border);
+    box-shadow:0 4px 12px rgba(0,0,0,0.4);
+  }
+  .lang-btn{
+    background:transparent;
+    border:none;
+    color:var(--text-dim);
+    font-size:11px;
+    font-weight:600;
+    font-family:'Inter', sans-serif;
+    padding:4px 8px;
+    border-radius:999px;
+    cursor:pointer;
+    transition:all .2s ease;
+    text-transform:uppercase;
+    letter-spacing:0.3px;
+  }
+  .lang-btn:hover{ color:var(--text); background:var(--surface-hover); }
+  .lang-btn.active{ background:var(--text); color:#0e0d0b; }
 
   /* ---------- RESPONSIVE ---------- */
   @media (max-width:860px){
@@ -435,11 +504,18 @@
     .modal{ padding:22px 18px; max-width:100%; }
 
     .post img{ max-height:280px; }
-    .comment-form input{ font-size:16px; } /* evita zoom automático de iOS al enfocar */
-    input[type="text"], input[type="email"], input[type="password"], input[type="url"], textarea{ font-size:16px; }
+    .comment-form input{ font-size:16px; }
+    input[type="text"], input[type="email"], input[type="password"], input[type="url"], input[type="color"], textarea{ font-size:16px; }
 
     .profile-head{ flex-wrap:wrap; }
     .profile-actions{ flex-direction:column; }
+    .profile-banner{ height:100px; margin:-26px -26px 0; }
+    .profile-head .avatar{ width:56px; height:56px; font-size:22px; margin-top:-20px; }
+
+    .lang-selector{ top:8px; right:8px; padding:4px 8px; gap:4px; }
+    .lang-btn{ font-size:10px; padding:3px 6px; }
+
+    .users-grid{ grid-template-columns:repeat(auto-fill, minmax(150px,1fr)); }
   }
 
   @media (max-width:420px){
@@ -449,6 +525,9 @@
     .stats{ flex-wrap:wrap; gap:10px 16px; }
     .filters{ gap:6px; }
     .chip{ padding:6px 11px; font-size:10.5px; }
+    .lang-selector{ top:6px; right:6px; }
+    .lang-btn{ font-size:9px; padding:2px 5px; }
+    .users-grid{ grid-template-columns:1fr 1fr; }
   }
 </style>
 </head>
@@ -457,44 +536,48 @@
 <div class="app">
   <aside class="sidebar">
     <div class="brand">
-      <span class="name">el cuaderno</span>
-      <span class="tag">MÚSICA · FOTOGRAFÍA · CINE</span>
+      <span class="name" data-i18n="brand">el cuaderno</span>
+      <span class="tag" data-i18n="brandTag">MÚSICA · FOTOGRAFÍA · CINE</span>
     </div>
 
     <nav class="side-nav" id="sideNav">
       <button class="side-link active" data-view="inicio">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h7v7H4z"/><path d="M13 4h7v4h-7z"/><path d="M13 11h7v9h-7z"/><path d="M4 14h7v6H4z"/></svg>
-        <span class="label">Inicio</span>
+        <span class="label" data-i18n="navInicio">Inicio</span>
       </button>
       <button class="side-link" data-view="muro">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>
-        <span class="label">Muro</span>
+        <span class="label" data-i18n="navMuro">Muro</span>
       </button>
       <button class="side-link" data-view="explorar">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg>
-        <span class="label">Explorar</span>
+        <span class="label" data-i18n="navExplorar">Explorar</span>
       </button>
       <button class="side-link" data-view="actividad">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M9.5 20a2.5 2.5 0 0 0 5 0"/></svg>
-        <span class="label">Actividad</span>
+        <span class="label" data-i18n="navActividad">Actividad</span>
       </button>
       <button class="side-link" data-view="perfil">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.5-6 8-6s8 2 8 6"/></svg>
-        <span class="label">Perfil</span>
+        <span class="label" data-i18n="navPerfil">Perfil</span>
+      </button>
+      <button class="side-link" data-view="usuarios">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span class="label" data-i18n="navUsuarios">Usuarios</span>
       </button>
       <button class="side-link" data-view="sobre-mi">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><circle cx="12" cy="8" r="0.6" fill="currentColor" stroke="none"/></svg>
-        <span class="label">Sobre mí</span>
+        <span class="label" data-i18n="navSobreMi">Sobre mí</span>
       </button>
     </nav>
 
     <button class="write-fab" id="writeFab">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
-      <span class="label">Escribir</span>
+      <span class="label" data-i18n="escribirBtn">Escribir</span>
     </button>
 
     <div class="sidebar-auth" id="sidebarAuth">
-      <button class="login-cta" id="loginCta">Iniciar sesión</button>
+      <button class="login-cta" id="loginCta" data-i18n="loginBtn">Iniciar sesión</button>
     </div>
     <div class="account-menu" id="accountMenu"></div>
 
@@ -503,20 +586,27 @@
 
   <main class="content">
 
+    <!-- Selector de idioma -->
+    <div class="lang-selector" id="langSelector">
+      <button class="lang-btn active" data-lang="es">ES</button>
+      <button class="lang-btn" data-lang="pt">PT</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+
     <!-- INICIO -->
     <section class="view active" data-view-section="inicio">
       <div class="view-inner wide">
         <div class="landing-hero">
-          <div class="landing-kicker">MÚSICA · FOTOGRAFÍA · CINE</div>
-          <h1>Un diario personal, hecho para compartirse.</h1>
-          <p class="landing-lead">
+          <div class="landing-kicker" data-i18n="landingKicker">MÚSICA · FOTOGRAFÍA · CINE</div>
+          <h1 data-i18n="landingTitle">Un diario personal, hecho para compartirse.</h1>
+          <p class="landing-lead" data-i18n="landingLead">
             «el cuaderno» es el archivo de lo que escucho, lo que fotografío y lo que veo.
             No es un blog ni una galería: es un cuaderno real, publicado en vivo, donde cada
             entrada queda ordenada por la pasión a la que pertenece.
           </p>
           <div class="landing-cta">
-            <button class="submit-btn" id="landingGoMuro" style="margin:0; width:auto; padding:13px 22px;">Ver el muro</button>
-            <button class="submit-btn ghost" id="landingSignup" style="margin:0; width:auto; padding:13px 22px;">Crear una cuenta</button>
+            <button class="submit-btn" id="landingGoMuro" style="margin:0; width:auto; padding:13px 22px;" data-i18n="landingBtnMuro">Ver el muro</button>
+            <button class="submit-btn ghost" id="landingSignup" style="margin:0; width:auto; padding:13px 22px;" data-i18n="landingBtnCuenta">Crear una cuenta</button>
           </div>
         </div>
 
@@ -525,22 +615,22 @@
             <div class="landing-card-icon música">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
             </div>
-            <h3>Por qué existe</h3>
-            <p>Para tener un solo lugar propio donde guardar reseñas, hallazgos y recuerdos de música, fotos y cine — en vez de repartirlos entre apps que no controlo.</p>
+            <h3 data-i18n="landingCard1Title">Por qué existe</h3>
+            <p data-i18n="landingCard1Desc">Para tener un solo lugar propio donde guardar reseñas, hallazgos y recuerdos de música, fotos y cine — en vez de repartirlos entre apps que no controlo.</p>
           </div>
           <div class="landing-card">
             <div class="landing-card-icon fotografía">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="14" rx="2"/><path d="M8 6l1.5-2h5L16 6"/><circle cx="12" cy="13" r="3.5"/></svg>
             </div>
-            <h3>Qué vas a encontrar</h3>
-            <p>Entradas cortas con texto, fotos y vídeos de YouTube incrustados, organizadas por categoría en el Muro y navegables por tema en Explorar.</p>
+            <h3 data-i18n="landingCard2Title">Qué vas a encontrar</h3>
+            <p data-i18n="landingCard2Desc">Entradas cortas con texto, fotos y vídeos de YouTube incrustados, organizadas por categoría en el Muro y navegables por tema en Explorar.</p>
           </div>
           <div class="landing-card">
             <div class="landing-card-icon cine">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 5v14M17 5v14M3 9h4M17 9h4M3 15h4M17 15h4"/></svg>
             </div>
-            <h3>Qué puedes hacer</h3>
-            <p>Crea una cuenta gratis para comentar y dar like a cualquier entrada, seguir la actividad reciente y armar tu propio perfil.</p>
+            <h3 data-i18n="landingCard3Title">Qué puedes hacer</h3>
+            <p data-i18n="landingCard3Desc">Crea una cuenta gratis para comentar y dar like a cualquier entrada, seguir la actividad reciente y armar tu propio perfil.</p>
           </div>
         </div>
       </div>
@@ -551,31 +641,31 @@
       <div class="view-inner">
         <div class="status-banner" id="statusBanner">
           <span>⚠</span>
-          <span><strong>Sin conexión con la base de datos.</strong> <span id="statusMessage"></span></span>
+          <span><strong data-i18n="statusBannerStrong">Sin conexión con la base de datos.</strong> <span id="statusMessage"></span></span>
         </div>
 
         <div class="hero">
-          <div class="avatar" id="heroAvatar">EC</div>
+          <div class="avatar" id="heroAvatar">𝄞</div>
           <div class="hero-text">
-            <div class="greeting">Bienvenido de vuelta</div>
-            <div class="sub">Un diario de música, fotografía y cine</div>
+            <div class="greeting" data-i18n="muroGreeting">Bienvenido de vuelta</div>
+            <div class="sub" data-i18n="muroSub">Un diario de música, fotografía y cine</div>
           </div>
         </div>
 
         <div class="stats" id="stats">
-          <div class="stat"><span class="num" id="statTotal">–</span><span class="label">Entradas</span></div>
-          <div class="stat música"><span class="num" id="statMusica">–</span><span class="label">Música</span></div>
-          <div class="stat fotografía"><span class="num" id="statFoto">–</span><span class="label">Foto</span></div>
-          <div class="stat cine"><span class="num" id="statCine">–</span><span class="label">Cine</span></div>
+          <div class="stat"><span class="num" id="statTotal">–</span><span class="label" data-i18n="statTotalLabel">Entradas</span></div>
+          <div class="stat música"><span class="num" id="statMusica">–</span><span class="label" data-i18n="statMusicaLabel">Música</span></div>
+          <div class="stat fotografía"><span class="num" id="statFoto">–</span><span class="label" data-i18n="statFotoLabel">Foto</span></div>
+          <div class="stat cine"><span class="num" id="statCine">–</span><span class="label" data-i18n="statCineLabel">Cine</span></div>
         </div>
 
         <div class="filters" id="filters">
-          <button class="chip on" data-cat="todos">TODOS</button>
-          <button class="chip" data-cat="música">MÚSICA</button>
-          <button class="chip" data-cat="fotografía">FOTOGRAFÍA</button>
-          <button class="chip" data-cat="cine">CINE</button>
+          <button class="chip on" data-cat="todos" data-i18n="filterTodos">TODOS</button>
+          <button class="chip" data-cat="música" data-i18n="filterMusica">MÚSICA</button>
+          <button class="chip" data-cat="fotografía" data-i18n="filterFoto">FOTOGRAFÍA</button>
+          <button class="chip" data-cat="cine" data-i18n="filterCine">CINE</button>
         </div>
-        <div id="feed"><div class="loading">cargando publicaciones…</div></div>
+        <div id="feed"><div class="loading" data-i18n="feedLoading">cargando publicaciones…</div></div>
       </div>
     </section>
 
@@ -583,38 +673,38 @@
     <section class="view" data-view-section="escribir">
       <div class="view-inner">
         <div class="form-card" id="writeCard" style="display:none;">
-          <h2>Nueva entrada</h2>
+          <h2 data-i18n="writeTitle">Nueva entrada</h2>
           <form id="postForm">
-            <label>Título</label>
-            <input type="text" id="fieldTitle" placeholder="Un título para esta entrada" required maxlength="120" />
+            <label data-i18n="writeLabelTitle">Título</label>
+            <input type="text" id="fieldTitle" placeholder="" required maxlength="120" data-i18n-placeholder="writePlaceholderTitle" />
 
-            <label>Categoría</label>
+            <label data-i18n="writeLabelCategory">Categoría</label>
             <div class="cat-select" id="catSelect">
-              <div class="cat-pill on" data-cat="música">Música</div>
-              <div class="cat-pill" data-cat="fotografía">Fotografía</div>
-              <div class="cat-pill" data-cat="cine">Cine</div>
+              <div class="cat-pill on" data-cat="música" data-i18n="writeCatMusica">Música</div>
+              <div class="cat-pill" data-cat="fotografía" data-i18n="writeCatFoto">Fotografía</div>
+              <div class="cat-pill" data-cat="cine" data-i18n="writeCatCine">Cine</div>
             </div>
 
-            <label>Contenido</label>
-            <textarea id="fieldContent" placeholder="Escribe lo que quieras contar…" required></textarea>
+            <label data-i18n="writeLabelContent">Contenido</label>
+            <textarea id="fieldContent" placeholder="" required data-i18n-placeholder="writePlaceholderContent"></textarea>
 
-            <label>Imagen (opcional)</label>
+            <label data-i18n="writeLabelImage">Imagen (opcional)</label>
             <div class="dropzone" id="dropzone">
-              <span id="dropzoneText">Haz clic para elegir una imagen</span>
+              <span id="dropzoneText" data-i18n="writeDropzoneText">Haz clic para elegir una imagen</span>
               <input type="file" id="fieldImage" accept="image/*" />
             </div>
 
-            <label>Enlace de YouTube (opcional)</label>
-            <input type="url" id="fieldYoutube" placeholder="https://youtube.com/watch?v=…" />
+            <label data-i18n="writeLabelVideo">Enlace de vídeo (opcional)</label>
+            <input type="url" id="fieldVideo" placeholder="" data-i18n-placeholder="writePlaceholderVideo" />
 
-            <button type="submit" class="submit-btn" id="submitBtn">Publicar</button>
+            <button type="submit" class="submit-btn" id="submitBtn" data-i18n="writeSubmitBtn">Publicar</button>
           </form>
         </div>
 
         <div class="empty" id="writeLocked">
           <div class="icon">🔒</div>
-          <div class="big">Publicar está reservado</div>
-          <span id="writeLockedMsg">Inicia sesión para saber si puedes publicar aquí.</span>
+          <div class="big" data-i18n="writeLockedBig">Publicar está reservado</div>
+          <span id="writeLockedMsg" data-i18n="writeLockedMsg">Inicia sesión para saber si puedes publicar aquí.</span>
         </div>
       </div>
     </section>
@@ -622,18 +712,18 @@
     <!-- EXPLORAR -->
     <section class="view" data-view-section="explorar">
       <div class="view-inner wide">
-        <div class="page-title">Explorar</div>
-        <p class="page-sub">Todo el archivo, organizado por pasión.</p>
+        <div class="page-title" data-i18n="exploreTitle">Explorar</div>
+        <p class="page-sub" data-i18n="exploreSub">Todo el archivo, organizado por pasión.</p>
         <div class="explore-group">
-          <div class="explore-head"><span class="dot música"></span><h3>Música</h3></div>
+          <div class="explore-head"><span class="dot música"></span><h3 data-i18n="exploreMusicaTitle">Música</h3></div>
           <div class="explore-grid" id="exploreMusica"></div>
         </div>
         <div class="explore-group">
-          <div class="explore-head"><span class="dot fotografía"></span><h3>Fotografía</h3></div>
+          <div class="explore-head"><span class="dot fotografía"></span><h3 data-i18n="exploreFotoTitle">Fotografía</h3></div>
           <div class="explore-grid" id="exploreFoto"></div>
         </div>
         <div class="explore-group">
-          <div class="explore-head"><span class="dot cine"></span><h3>Cine</h3></div>
+          <div class="explore-head"><span class="dot cine"></span><h3 data-i18n="exploreCineTitle">Cine</h3></div>
           <div class="explore-grid" id="exploreCine"></div>
         </div>
       </div>
@@ -642,23 +732,32 @@
     <!-- ACTIVIDAD -->
     <section class="view" data-view-section="actividad">
       <div class="view-inner">
-        <div class="page-title">Actividad</div>
-        <p class="page-sub">Lo último que la comunidad comentó y le gustó.</p>
-        <div id="activityFeed"><div class="loading">cargando actividad…</div></div>
+        <div class="page-title" data-i18n="activityTitle">Actividad</div>
+        <p class="page-sub" data-i18n="activitySub">Lo último que la comunidad comentó y le gustó.</p>
+        <div id="activityFeed"><div class="loading" data-i18n="activityLoading">cargando actividad…</div></div>
+      </div>
+    </section>
+
+    <!-- USUARIOS -->
+    <section class="view" data-view-section="usuarios">
+      <div class="view-inner wide">
+        <div class="page-title" data-i18n="usuariosTitle">Usuarios</div>
+        <p class="page-sub" data-i18n="usuariosSub">Todos los miembros registrados en el cuaderno.</p>
+        <div id="usersList"><div class="loading" data-i18n="usuariosLoading">cargando usuarios…</div></div>
       </div>
     </section>
 
     <!-- PERFIL -->
     <section class="view" data-view-section="perfil">
       <div class="view-inner">
-        <div id="profileContent"><div class="loading">cargando perfil…</div></div>
+        <div id="profileContent"><div class="loading" data-i18n="profileLoading">cargando perfil…</div></div>
       </div>
     </section>
 
     <!-- SOBRE MÍ -->
     <section class="view" data-view-section="sobre-mi">
       <div class="view-inner">
-        <div id="aboutContent"><div class="loading">cargando…</div></div>
+        <div id="aboutContent"><div class="loading" data-i18n="aboutLoading">cargando…</div></div>
       </div>
     </section>
 
@@ -670,32 +769,32 @@
   <div class="modal">
     <button class="modal-close" id="authClose">✕</button>
     <div class="modal-tabs">
-      <button class="modal-tab on" data-authtab="login">Iniciar sesión</button>
-      <button class="modal-tab" data-authtab="signup">Crear cuenta</button>
+      <button class="modal-tab on" data-authtab="login" data-i18n="authTabLogin">Iniciar sesión</button>
+      <button class="modal-tab" data-authtab="signup" data-i18n="authTabSignup">Crear cuenta</button>
     </div>
 
     <form id="loginForm">
-      <h2>Bienvenido de vuelta</h2>
-      <p class="sub">Entra para comentar y dar like.</p>
-      <label>Email</label>
+      <h2 data-i18n="authLoginTitle">Bienvenido de vuelta</h2>
+      <p class="sub" data-i18n="authLoginSub">Entra para comentar y dar like.</p>
+      <label data-i18n="authLabelEmail">Email</label>
       <input type="email" id="loginEmail" required />
-      <label>Contraseña</label>
+      <label data-i18n="authLabelPassword">Contraseña</label>
       <input type="password" id="loginPassword" required minlength="6" />
       <div class="field-error" id="loginError"></div>
-      <button type="submit" class="submit-btn" id="loginSubmit">Entrar</button>
+      <button type="submit" class="submit-btn" id="loginSubmit" data-i18n="authLoginBtn">Entrar</button>
     </form>
 
     <form id="signupForm" style="display:none">
-      <h2>Crea tu cuenta</h2>
-      <p class="sub">Únete para participar en el diario.</p>
-      <label>Nombre de usuario</label>
-      <input type="text" id="signupUsername" required minlength="3" maxlength="24" pattern="[a-zA-Z0-9_]+" placeholder="sin espacios ni símbolos" />
-      <label>Email</label>
+      <h2 data-i18n="authSignupTitle">Crea tu cuenta</h2>
+      <p class="sub" data-i18n="authSignupSub">Únete para participar en el diario.</p>
+      <label data-i18n="authLabelUsername">Nombre de usuario</label>
+      <input type="text" id="signupUsername" required minlength="3" maxlength="24" pattern="[a-zA-Z0-9_]+" placeholder="" data-i18n-placeholder="authPlaceholderUsername" />
+      <label data-i18n="authLabelEmail">Email</label>
       <input type="email" id="signupEmail" required />
-      <label>Contraseña</label>
+      <label data-i18n="authLabelPassword">Contraseña</label>
       <input type="password" id="signupPassword" required minlength="6" />
       <div class="field-error" id="signupError"></div>
-      <button type="submit" class="submit-btn" id="signupSubmit">Crear cuenta</button>
+      <button type="submit" class="submit-btn" id="signupSubmit" data-i18n="authSignupBtn">Crear cuenta</button>
     </form>
   </div>
 </div>
@@ -706,15 +805,15 @@
 <div class="modal-overlay" id="settingsOverlay">
   <div class="modal">
     <button class="modal-close" id="settingsClose">✕</button>
-    <h2>Configuración de cuenta</h2>
+    <h2 data-i18n="settingsTitle">Configuración de cuenta</h2>
     <p class="sub" id="settingsCurrentEmail"></p>
     <form id="settingsForm">
-      <label>Nuevo email (opcional)</label>
-      <input type="email" id="settingsEmail" placeholder="Déjalo en blanco para no cambiarlo" />
-      <label>Nueva contraseña (opcional)</label>
-      <input type="password" id="settingsPassword" minlength="6" placeholder="Déjalo en blanco para no cambiarla" />
+      <label data-i18n="settingsLabelEmail">Nuevo email (opcional)</label>
+      <input type="email" id="settingsEmail" placeholder="" data-i18n-placeholder="settingsPlaceholderEmail" />
+      <label data-i18n="settingsLabelPassword">Nueva contraseña (opcional)</label>
+      <input type="password" id="settingsPassword" minlength="6" placeholder="" data-i18n-placeholder="settingsPlaceholderPassword" />
       <div class="field-error" id="settingsError"></div>
-      <button type="submit" class="submit-btn" id="settingsSubmit">Guardar cambios de cuenta</button>
+      <button type="submit" class="submit-btn" id="settingsSubmit" data-i18n="settingsSubmitBtn">Guardar cambios de cuenta</button>
     </form>
   </div>
 </div>
@@ -723,6 +822,482 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function(){
+
+/* =========================================================
+   TRADUCCIONES
+   ========================================================= */
+const LANG_STORAGE_KEY = 'elcuaderno_lang';
+const translations = {
+  es: {
+    brand: 'el cuaderno',
+    brandTag: 'MÚSICA · FOTOGRAFÍA · CINE',
+    navInicio: 'Inicio',
+    navMuro: 'Muro',
+    navExplorar: 'Explorar',
+    navActividad: 'Actividad',
+    navPerfil: 'Perfil',
+    navUsuarios: 'Usuarios',
+    navSobreMi: 'Sobre mí',
+    escribirBtn: 'Escribir',
+    loginBtn: 'Iniciar sesión',
+    landingKicker: 'MÚSICA · FOTOGRAFÍA · CINE',
+    landingTitle: 'Un diario personal, hecho para compartirse.',
+    landingLead: '«el cuaderno» es el archivo de lo que escucho, lo que fotografío y lo que veo. No es un blog ni una galería: es un cuaderno real, publicado en vivo, donde cada entrada queda ordenada por la pasión a la que pertenece.',
+    landingBtnMuro: 'Ver el muro',
+    landingBtnCuenta: 'Crear una cuenta',
+    landingCard1Title: 'Por qué existe',
+    landingCard1Desc: 'Para tener un solo lugar propio donde guardar reseñas, hallazgos y recuerdos de música, fotos y cine — en vez de repartirlos entre apps que no controlo.',
+    landingCard2Title: 'Qué vas a encontrar',
+    landingCard2Desc: 'Entradas cortas con texto, fotos y vídeos de YouTube incrustados, organizadas por categoría en el Muro y navegables por tema en Explorar.',
+    landingCard3Title: 'Qué puedes hacer',
+    landingCard3Desc: 'Crea una cuenta gratis para comentar y dar like a cualquier entrada, seguir la actividad reciente y armar tu propio perfil.',
+    statusBannerStrong: 'Sin conexión con la base de datos.',
+    muroGreeting: 'Bienvenido de vuelta',
+    muroSub: 'Un diario de música, fotografía y cine',
+    statTotalLabel: 'Entradas',
+    statMusicaLabel: 'Música',
+    statFotoLabel: 'Foto',
+    statCineLabel: 'Cine',
+    filterTodos: 'TODOS',
+    filterMusica: 'MÚSICA',
+    filterFoto: 'FOTOGRAFÍA',
+    filterCine: 'CINE',
+    feedLoading: 'cargando publicaciones…',
+    writeTitle: 'Nueva entrada',
+    writeLabelTitle: 'Título',
+    writePlaceholderTitle: 'Un título para esta entrada',
+    writeLabelCategory: 'Categoría',
+    writeCatMusica: 'Música',
+    writeCatFoto: 'Fotografía',
+    writeCatCine: 'Cine',
+    writeLabelContent: 'Contenido',
+    writePlaceholderContent: 'Escribe lo que quieras contar…',
+    writeLabelImage: 'Imagen (opcional)',
+    writeDropzoneText: 'Haz clic para elegir una imagen',
+    writeLabelVideo: 'Enlace de vídeo (opcional)',
+    writePlaceholderVideo: 'https://youtube.com/watch?v=… o de cualquier plataforma',
+    writeSubmitBtn: 'Publicar',
+    writeLockedBig: 'Publicar está reservado',
+    writeLockedMsg: 'Inicia sesión para saber si puedes publicar aquí.',
+    exploreTitle: 'Explorar',
+    exploreSub: 'Todo el archivo, organizado por pasión.',
+    exploreMusicaTitle: 'Música',
+    exploreFotoTitle: 'Fotografía',
+    exploreCineTitle: 'Cine',
+    activityTitle: 'Actividad',
+    activitySub: 'Lo último que la comunidad comentó y le gustó.',
+    activityLoading: 'cargando actividad…',
+    profileLoading: 'cargando perfil…',
+    aboutLoading: 'cargando…',
+    usuariosTitle: 'Usuarios',
+    usuariosSub: 'Todos los miembros registrados en el cuaderno.',
+    usuariosLoading: 'cargando usuarios…',
+    authTabLogin: 'Iniciar sesión',
+    authTabSignup: 'Crear cuenta',
+    authLoginTitle: 'Bienvenido de vuelta',
+    authLoginSub: 'Entra para comentar y dar like.',
+    authLabelEmail: 'Email',
+    authLabelPassword: 'Contraseña',
+    authLoginBtn: 'Entrar',
+    authSignupTitle: 'Crea tu cuenta',
+    authSignupSub: 'Únete para participar en el diario.',
+    authLabelUsername: 'Nombre de usuario',
+    authPlaceholderUsername: 'sin espacios ni símbolos',
+    authSignupBtn: 'Crear cuenta',
+    settingsTitle: 'Configuración de cuenta',
+    settingsLabelEmail: 'Nuevo email (opcional)',
+    settingsPlaceholderEmail: 'Déjalo en blanco para no cambiarlo',
+    settingsLabelPassword: 'Nueva contraseña (opcional)',
+    settingsPlaceholderPassword: 'Déjalo en blanco para no cambiarla',
+    settingsSubmitBtn: 'Guardar cambios de cuenta',
+    profileBannerLabel: 'Banner (imagen o color)',
+    profileBannerColorPlaceholder: 'Color hex (ej: #8b7cf0)',
+    profileBannerImage: 'Imagen de banner',
+    profileLocationLabel: 'Ubicación',
+    profileLocationPlaceholder: 'Ciudad, país…',
+    profileWebsiteLabel: 'Sitio web',
+    profileWebsitePlaceholder: 'https://tusitio.com',
+    msgLoadingPosts: 'cargando publicaciones…',
+    msgNoPosts: 'Todavía no hay nada aquí',
+    msgNoPostsSub: 'Vuelve pronto por nuevas entradas.',
+    msgNoCategory: 'sin categoría',
+    msgCommentPlaceholder: 'Escribe un comentario…',
+    msgCommentSubmit: 'Enviar',
+    msgCommentLogin: 'Inicia sesión para comentar.',
+    msgNoComments: 'Todavía no hay comentarios.',
+    msgPostPublished: 'Publicado ✓',
+    msgSessionStarted: 'Sesión iniciada ✓',
+    msgAccountCreated: 'Cuenta creada ✓',
+    msgSignedOut: 'Sesión cerrada',
+    msgEmailUpdated: 'Revisa tu correo para confirmar el nuevo email ✓',
+    msgPasswordUpdated: 'Contraseña actualizada ✓',
+    msgNoChanges: 'No hay ningún cambio para guardar.',
+    msgSaving: 'Guardando…',
+    msgCreating: 'Creando…',
+    msgLoggingIn: 'Entrando…',
+    msgActivityLoading: 'cargando actividad…',
+    msgNoActivity: 'Sin actividad todavía',
+    msgNoActivitySub: 'Los likes y comentarios aparecerán aquí.',
+    msgSomeone: 'alguien',
+    msgOneEntry: 'una entrada',
+    msgLiked: 'le dio like a «{title}»',
+    msgCommented: 'comentó en «{title}»: "{content}"',
+    msgNotLoggedIn: 'No has iniciado sesión',
+    msgNotLoggedInSub: 'Crea una cuenta o entra para ver y editar tu perfil.',
+    msgProfileUpdated: 'Perfil actualizado ✓',
+    msgAboutDefault: 'Este es un diario personal sobre música, fotografía y cine — un lugar para archivar lo que escucho, lo que fotografío y lo que veo. Crea una cuenta para comentar y dar like a las entradas.',
+    msgErrorPrefix: 'Error: ',
+    msgImage: 'Imagen',
+    msgNoImage: 'Todavía no hay entradas de {cat}.',
+    msgTotalEntries: 'Entradas',
+    msgLikes: 'likes',
+    msgPost: 'Publicar',
+    msgWriteLocked: 'Publicar está reservado',
+    msgWriteLockedSub: 'Inicia sesión para saber si puedes publicar aquí.',
+    msgProfileDisplayName: 'Nombre para mostrar',
+    msgProfileBio: 'Bio',
+    msgProfileAvatar: 'Foto de perfil',
+    msgProfileSave: 'Guardar cambios',
+    msgProfileSignOut: 'Cerrar sesión',
+    msgAdminBadge: 'PROPIETARIO',
+    msgSettingsCurrent: 'Sesión actual: {email}',
+    msgError: 'Error',
+    msgUserJoined: 'Se unió el {date}',
+    msgNoUsers: 'Todavía no hay usuarios registrados.',
+    msgOpenVideo: 'Abrir vídeo en nueva pestaña',
+  },
+  pt: {
+    brand: 'o caderno',
+    brandTag: 'MÚSICA · FOTOGRAFIA · CINEMA',
+    navInicio: 'Início',
+    navMuro: 'Mural',
+    navExplorar: 'Explorar',
+    navActividad: 'Atividade',
+    navPerfil: 'Perfil',
+    navUsuarios: 'Usuários',
+    navSobreMi: 'Sobre mim',
+    escribirBtn: 'Escrever',
+    loginBtn: 'Iniciar sessão',
+    landingKicker: 'MÚSICA · FOTOGRAFIA · CINEMA',
+    landingTitle: 'Um diário pessoal, feito para ser compartilhado.',
+    landingLead: '«o caderno» é o arquivo do que ouço, do que fotografo e do que vejo. Não é um blog nem uma galeria: é um caderno real, publicado ao vivo, onde cada entrada fica organizada pela paixão a que pertence.',
+    landingBtnMuro: 'Ver o mural',
+    landingBtnCuenta: 'Criar uma conta',
+    landingCard1Title: 'Por que existe',
+    landingCard1Desc: 'Para ter um só lugar onde guardar resenhas, descobertas e memórias de música, fotos e cinema — em vez de espalhá-los por aplicativos que não controlo.',
+    landingCard2Title: 'O que você vai encontrar',
+    landingCard2Desc: 'Posts curtos com texto, fotos e vídeos do YouTube incorporados, organizados por categoria no Mural e navegáveis por tema em Explorar.',
+    landingCard3Title: 'O que você pode fazer',
+    landingCard3Desc: 'Crie uma conta grátis para comentar e dar like em qualquer post, acompanhar a atividade recente e montar seu próprio perfil.',
+    statusBannerStrong: 'Sem conexão com a base de dados.',
+    muroGreeting: 'Bem-vindo de volta',
+    muroSub: 'Um diário de música, fotografia e cinema',
+    statTotalLabel: 'Posts',
+    statMusicaLabel: 'Música',
+    statFotoLabel: 'Foto',
+    statCineLabel: 'Cinema',
+    filterTodos: 'TODOS',
+    filterMusica: 'MÚSICA',
+    filterFoto: 'FOTOGRAFIA',
+    filterCine: 'CINEMA',
+    feedLoading: 'carregando publicações…',
+    writeTitle: 'Nova entrada',
+    writeLabelTitle: 'Título',
+    writePlaceholderTitle: 'Um título para esta entrada',
+    writeLabelCategory: 'Categoria',
+    writeCatMusica: 'Música',
+    writeCatFoto: 'Fotografia',
+    writeCatCine: 'Cinema',
+    writeLabelContent: 'Conteúdo',
+    writePlaceholderContent: 'Escreva o que quiser contar…',
+    writeLabelImage: 'Imagem (opcional)',
+    writeDropzoneText: 'Clique para escolher uma imagem',
+    writeLabelVideo: 'Link de vídeo (opcional)',
+    writePlaceholderVideo: 'https://youtube.com/watch?v=… ou de qualquer plataforma',
+    writeSubmitBtn: 'Publicar',
+    writeLockedBig: 'Publicar é reservado',
+    writeLockedMsg: 'Inicie sessão para saber se pode publicar aqui.',
+    exploreTitle: 'Explorar',
+    exploreSub: 'Todo o arquivo, organizado por paixão.',
+    exploreMusicaTitle: 'Música',
+    exploreFotoTitle: 'Fotografia',
+    exploreCineTitle: 'Cinema',
+    activityTitle: 'Atividade',
+    activitySub: 'O que a comunidade comentou e curtiu recentemente.',
+    activityLoading: 'carregando atividade…',
+    profileLoading: 'carregando perfil…',
+    aboutLoading: 'carregando…',
+    usuariosTitle: 'Usuários',
+    usuariosSub: 'Todos os membros registrados no caderno.',
+    usuariosLoading: 'carregando usuários…',
+    authTabLogin: 'Iniciar sessão',
+    authTabSignup: 'Criar conta',
+    authLoginTitle: 'Bem-vindo de volta',
+    authLoginSub: 'Entre para comentar e dar like.',
+    authLabelEmail: 'Email',
+    authLabelPassword: 'Senha',
+    authLoginBtn: 'Entrar',
+    authSignupTitle: 'Crie sua conta',
+    authSignupSub: 'Junte-se para participar do diário.',
+    authLabelUsername: 'Nome de usuário',
+    authPlaceholderUsername: 'sem espaços nem símbolos',
+    authSignupBtn: 'Criar conta',
+    settingsTitle: 'Configurações da conta',
+    settingsLabelEmail: 'Novo email (opcional)',
+    settingsPlaceholderEmail: 'Deixe em branco para não alterar',
+    settingsLabelPassword: 'Nova senha (opcional)',
+    settingsPlaceholderPassword: 'Deixe em branco para não alterar',
+    settingsSubmitBtn: 'Salvar alterações da conta',
+    profileBannerLabel: 'Banner (imagem ou cor)',
+    profileBannerColorPlaceholder: 'Cor hex (ex: #8b7cf0)',
+    profileBannerImage: 'Imagem de banner',
+    profileLocationLabel: 'Localização',
+    profileLocationPlaceholder: 'Cidade, país…',
+    profileWebsiteLabel: 'Site',
+    profileWebsitePlaceholder: 'https://seusite.com',
+    msgLoadingPosts: 'carregando publicações…',
+    msgNoPosts: 'Ainda não há nada aqui',
+    msgNoPostsSub: 'Volte em breve para novas entradas.',
+    msgNoCategory: 'sem categoria',
+    msgCommentPlaceholder: 'Escreva um comentário…',
+    msgCommentSubmit: 'Enviar',
+    msgCommentLogin: 'Inicie sessão para comentar.',
+    msgNoComments: 'Ainda não há comentários.',
+    msgPostPublished: 'Publicado ✓',
+    msgSessionStarted: 'Sessão iniciada ✓',
+    msgAccountCreated: 'Conta criada ✓',
+    msgSignedOut: 'Sessão encerrada',
+    msgEmailUpdated: 'Verifique seu email para confirmar o novo endereço ✓',
+    msgPasswordUpdated: 'Senha atualizada ✓',
+    msgNoChanges: 'Nenhuma alteração para salvar.',
+    msgSaving: 'Salvando…',
+    msgCreating: 'Criando…',
+    msgLoggingIn: 'Entrando…',
+    msgActivityLoading: 'carregando atividade…',
+    msgNoActivity: 'Sem atividade ainda',
+    msgNoActivitySub: 'Curtidas e comentários aparecerão aqui.',
+    msgSomeone: 'alguém',
+    msgOneEntry: 'uma entrada',
+    msgLiked: 'curtiu «{title}»',
+    msgCommented: 'comentou em «{title}»: "{content}"',
+    msgNotLoggedIn: 'Você não iniciou sessão',
+    msgNotLoggedInSub: 'Crie uma conta ou entre para ver e editar seu perfil.',
+    msgProfileUpdated: 'Perfil atualizado ✓',
+    msgAboutDefault: 'Este é um diário pessoal sobre música, fotografia e cinema — um lugar para arquivar o que ouço, o que fotografo e o que vejo. Crie uma conta para comentar e dar like nas entradas.',
+    msgErrorPrefix: 'Erro: ',
+    msgImage: 'Imagem',
+    msgNoImage: 'Ainda não há entradas de {cat}.',
+    msgTotalEntries: 'Posts',
+    msgLikes: 'curtidas',
+    msgPost: 'Publicar',
+    msgWriteLocked: 'Publicar é reservado',
+    msgWriteLockedSub: 'Inicie sessão para saber se pode publicar aqui.',
+    msgProfileDisplayName: 'Nome para exibir',
+    msgProfileBio: 'Bio',
+    msgProfileAvatar: 'Foto de perfil',
+    msgProfileSave: 'Salvar alterações',
+    msgProfileSignOut: 'Encerrar sessão',
+    msgAdminBadge: 'PROPRIETÁRIO',
+    msgSettingsCurrent: 'Sessão atual: {email}',
+    msgError: 'Erro',
+    msgUserJoined: 'Ingressou em {date}',
+    msgNoUsers: 'Ainda não há usuários registrados.',
+    msgOpenVideo: 'Abrir vídeo em nova aba',
+  },
+  en: {
+    brand: 'the notebook',
+    brandTag: 'MUSIC · PHOTOGRAPHY · CINEMA',
+    navInicio: 'Home',
+    navMuro: 'Wall',
+    navExplorar: 'Explore',
+    navActividad: 'Activity',
+    navPerfil: 'Profile',
+    navUsuarios: 'Users',
+    navSobreMi: 'About me',
+    escribirBtn: 'Write',
+    loginBtn: 'Sign in',
+    landingKicker: 'MUSIC · PHOTOGRAPHY · CINEMA',
+    landingTitle: 'A personal diary, made to be shared.',
+    landingLead: '«the notebook» is the archive of what I listen to, what I photograph, and what I watch. It’s not a blog or a gallery: it’s a real notebook, published live, where each entry is ordered by the passion it belongs to.',
+    landingBtnMuro: 'View the Wall',
+    landingBtnCuenta: 'Create an account',
+    landingCard1Title: 'Why it exists',
+    landingCard1Desc: 'To have a single place to keep reviews, findings, and memories of music, photos, and cinema — instead of spreading them across apps I don’t control.',
+    landingCard2Title: 'What you’ll find',
+    landingCard2Desc: 'Short entries with text, photos, and embedded YouTube videos, organized by category on the Wall and browsable by theme in Explore.',
+    landingCard3Title: 'What you can do',
+    landingCard3Desc: 'Create a free account to comment and like any entry, follow recent activity, and build your own profile.',
+    statusBannerStrong: 'No connection to the database.',
+    muroGreeting: 'Welcome back',
+    muroSub: 'A diary of music, photography and cinema',
+    statTotalLabel: 'Entries',
+    statMusicaLabel: 'Music',
+    statFotoLabel: 'Photo',
+    statCineLabel: 'Cinema',
+    filterTodos: 'ALL',
+    filterMusica: 'MUSIC',
+    filterFoto: 'PHOTOGRAPHY',
+    filterCine: 'CINEMA',
+    feedLoading: 'loading posts…',
+    writeTitle: 'New entry',
+    writeLabelTitle: 'Title',
+    writePlaceholderTitle: 'A title for this entry',
+    writeLabelCategory: 'Category',
+    writeCatMusica: 'Music',
+    writeCatFoto: 'Photography',
+    writeCatCine: 'Cinema',
+    writeLabelContent: 'Content',
+    writePlaceholderContent: 'Write what you want to tell…',
+    writeLabelImage: 'Image (optional)',
+    writeDropzoneText: 'Click to choose an image',
+    writeLabelVideo: 'Video link (optional)',
+    writePlaceholderVideo: 'https://youtube.com/watch?v=… or any platform',
+    writeSubmitBtn: 'Publish',
+    writeLockedBig: 'Publishing is reserved',
+    writeLockedMsg: 'Sign in to know if you can post here.',
+    exploreTitle: 'Explore',
+    exploreSub: 'The entire archive, organized by passion.',
+    exploreMusicaTitle: 'Music',
+    exploreFotoTitle: 'Photography',
+    exploreCineTitle: 'Cinema',
+    activityTitle: 'Activity',
+    activitySub: 'What the community recently commented and liked.',
+    activityLoading: 'loading activity…',
+    profileLoading: 'loading profile…',
+    aboutLoading: 'loading…',
+    usuariosTitle: 'Users',
+    usuariosSub: 'All registered members of the notebook.',
+    usuariosLoading: 'loading users…',
+    authTabLogin: 'Sign in',
+    authTabSignup: 'Create account',
+    authLoginTitle: 'Welcome back',
+    authLoginSub: 'Sign in to comment and like.',
+    authLabelEmail: 'Email',
+    authLabelPassword: 'Password',
+    authLoginBtn: 'Sign in',
+    authSignupTitle: 'Create your account',
+    authSignupSub: 'Join to participate in the diary.',
+    authLabelUsername: 'Username',
+    authPlaceholderUsername: 'no spaces or symbols',
+    authSignupBtn: 'Create account',
+    settingsTitle: 'Account settings',
+    settingsLabelEmail: 'New email (optional)',
+    settingsPlaceholderEmail: 'Leave blank to keep current',
+    settingsLabelPassword: 'New password (optional)',
+    settingsPlaceholderPassword: 'Leave blank to keep current',
+    settingsSubmitBtn: 'Save account changes',
+    profileBannerLabel: 'Banner (image or color)',
+    profileBannerColorPlaceholder: 'Hex color (e.g. #8b7cf0)',
+    profileBannerImage: 'Banner image',
+    profileLocationLabel: 'Location',
+    profileLocationPlaceholder: 'City, country…',
+    profileWebsiteLabel: 'Website',
+    profileWebsitePlaceholder: 'https://yoursite.com',
+    msgLoadingPosts: 'loading posts…',
+    msgNoPosts: 'Nothing here yet',
+    msgNoPostsSub: 'Come back soon for new entries.',
+    msgNoCategory: 'uncategorized',
+    msgCommentPlaceholder: 'Write a comment…',
+    msgCommentSubmit: 'Send',
+    msgCommentLogin: 'Sign in to comment.',
+    msgNoComments: 'No comments yet.',
+    msgPostPublished: 'Published ✓',
+    msgSessionStarted: 'Signed in ✓',
+    msgAccountCreated: 'Account created ✓',
+    msgSignedOut: 'Signed out',
+    msgEmailUpdated: 'Check your email to confirm the new address ✓',
+    msgPasswordUpdated: 'Password updated ✓',
+    msgNoChanges: 'No changes to save.',
+    msgSaving: 'Saving…',
+    msgCreating: 'Creating…',
+    msgLoggingIn: 'Signing in…',
+    msgActivityLoading: 'loading activity…',
+    msgNoActivity: 'No activity yet',
+    msgNoActivitySub: 'Likes and comments will appear here.',
+    msgSomeone: 'someone',
+    msgOneEntry: 'an entry',
+    msgLiked: 'liked «{title}»',
+    msgCommented: 'commented on «{title}»: "{content}"',
+    msgNotLoggedIn: 'You are not signed in',
+    msgNotLoggedInSub: 'Create an account or sign in to view and edit your profile.',
+    msgProfileUpdated: 'Profile updated ✓',
+    msgAboutDefault: 'This is a personal diary about music, photography, and cinema — a place to archive what I listen to, what I photograph, and what I watch. Create an account to comment and like entries.',
+    msgErrorPrefix: 'Error: ',
+    msgImage: 'Image',
+    msgNoImage: 'No entries for {cat} yet.',
+    msgTotalEntries: 'Entries',
+    msgLikes: 'likes',
+    msgPost: 'Publish',
+    msgWriteLocked: 'Publishing is reserved',
+    msgWriteLockedSub: 'Sign in to know if you can post here.',
+    msgProfileDisplayName: 'Display name',
+    msgProfileBio: 'Bio',
+    msgProfileAvatar: 'Profile picture',
+    msgProfileSave: 'Save changes',
+    msgProfileSignOut: 'Sign out',
+    msgAdminBadge: 'OWNER',
+    msgSettingsCurrent: 'Current session: {email}',
+    msgError: 'Error',
+    msgUserJoined: 'Joined on {date}',
+    msgNoUsers: 'No registered users yet.',
+    msgOpenVideo: 'Open video in new tab',
+  }
+};
+
+let currentLang = localStorage.getItem(LANG_STORAGE_KEY) || 'es';
+let currentTranslations = translations[currentLang] || translations.es;
+
+function t(key, vars={}) {
+  let str = currentTranslations[key] || key;
+  for (const [k, v] of Object.entries(vars)) {
+    str = str.replace(new RegExp(`\\{${k}\\}`, 'g'), v);
+  }
+  return str;
+}
+
+function applyLanguage() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    el.textContent = t(key);
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.dataset.i18nPlaceholder;
+    el.placeholder = t(key);
+  });
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.lang === currentLang);
+  });
+  if (document.querySelector('.side-link[data-view="perfil"]')?.classList.contains('active')) renderProfileView();
+  if (document.querySelector('.side-link[data-view="sobre-mi"]')?.classList.contains('active')) renderAbout();
+  if (document.querySelector('.side-link[data-view="usuarios"]')?.classList.contains('active')) renderUsers();
+  renderFeed();
+  renderExplore();
+  fetchActivity();
+  updateStats();
+  const strong = document.querySelector('#statusBanner strong');
+  if (strong) strong.textContent = t('statusBannerStrong');
+  renderAuthWidget();
+  const settingsEmail = document.getElementById('settingsCurrentEmail');
+  if (settingsEmail && currentUser) settingsEmail.textContent = t('msgSettingsCurrent', { email: currentUser.email });
+  renderWriteAccess();
+}
+
+document.getElementById('langSelector').addEventListener('click', (e) => {
+  const btn = e.target.closest('.lang-btn');
+  if (!btn) return;
+  const lang = btn.dataset.lang;
+  if (lang === currentLang) return;
+  currentLang = lang;
+  localStorage.setItem(LANG_STORAGE_KEY, lang);
+  currentTranslations = translations[lang];
+  applyLanguage();
+  if (document.querySelector('.side-link[data-view="muro"]')?.classList.contains('active')) renderFeed();
+  if (document.querySelector('.side-link[data-view="explorar"]')?.classList.contains('active')) renderExplore();
+  if (document.querySelector('.side-link[data-view="actividad"]')?.classList.contains('active')) fetchActivity();
+  if (document.querySelector('.side-link[data-view="perfil"]')?.classList.contains('active')) renderProfileView();
+  if (document.querySelector('.side-link[data-view="sobre-mi"]')?.classList.contains('active')) renderAbout();
+  if (document.querySelector('.side-link[data-view="usuarios"]')?.classList.contains('active')) renderUsers();
+});
 
 /* =========================================================
    CONFIGURACIÓN SUPABASE
@@ -745,15 +1320,15 @@ try{
 /* =========================================================
    ESTADO GLOBAL
    ========================================================= */
-let currentUser = null;      // sesión de auth.users
-let currentProfile = null;   // fila de profiles del usuario logueado
+let currentUser = null;
+let currentProfile = null;
 let isAdmin = false;
 
 let allPosts = [];
 let allLikes = [];
 let allComments = [];
 let activeFilter = 'todos';
-let viewedProfileId = null;  // si se está viendo el perfil de otra persona
+let viewedProfileId = null;
 let openComments = new Set();
 
 /* =========================================================
@@ -765,12 +1340,20 @@ function escapeHtml(str=''){
 function initials(name=''){
   return (name.trim()[0] || '?').toUpperCase();
 }
-function timeAgo(dateStr){
-  const diff = (Date.now() - new Date(dateStr).getTime()) / 1000;
-  if (diff < 60) return 'ahora mismo';
-  if (diff < 3600) return Math.floor(diff/60) + ' min';
-  if (diff < 86400) return Math.floor(diff/3600) + ' h';
-  return Math.floor(diff/86400) + ' d';
+function formatDateTime(dateStr){
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  return d.toLocaleString(currentLang === 'es' ? 'es-ES' : (currentLang === 'pt' ? 'pt-PT' : 'en-US'), {
+    day: '2-digit', month: '2-digit', year: 'numeric',
+    hour: '2-digit', minute: '2-digit'
+  });
+}
+function formatDate(dateStr){
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  return d.toLocaleDateString(currentLang === 'es' ? 'es-ES' : (currentLang === 'pt' ? 'pt-PT' : 'en-US'), {
+    day: '2-digit', month: '2-digit', year: 'numeric'
+  });
 }
 function showToast(msg, isError=false){
   const t = document.getElementById('toast');
@@ -792,23 +1375,41 @@ function avatarHtml(profile, size){
   if (url) return `<img src="${url}" alt="${escapeHtml(name)}" />`;
   return initials(name);
 }
-function extractYoutubeId(url){
+
+/* =========================================================
+   DETECCIÓN DE PLATAFORMAS DE VÍDEO
+   ========================================================= */
+function detectVideoPlatform(url){
   if (!url) return null;
   const patterns = [
-    /(?:youtube\.com\/watch\?v=)([\w-]{11})/,
-    /(?:youtu\.be\/)([\w-]{11})/,
-    /(?:youtube\.com\/embed\/)([\w-]{11})/,
-    /(?:youtube\.com\/shorts\/)([\w-]{11})/
+    { platform: 'youtube', re: /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([\w-]{11})/ },
+    { platform: 'vimeo', re: /(?:vimeo\.com\/)(\d+)/ },
+    { platform: 'dailymotion', re: /(?:dailymotion\.com\/video\/)([a-zA-Z0-9]+)/ },
+    { platform: 'twitch', re: /(?:twitch\.tv\/)(?:clips\/)?([a-zA-Z0-9_]+)/ },
+    { platform: 'tiktok', re: /(?:tiktok\.com\/@[\w.]+\/video\/)(\d+)/ },
+    { platform: 'peertube', re: /(?:peertube\.\w+\/w\/)([a-zA-Z0-9-]+)/ },
   ];
-  for (const re of patterns){
-    const m = url.match(re);
-    if (m) return m[1];
+  for (const p of patterns) {
+    const m = url.match(p.re);
+    if (m) return { platform: p.platform, id: m[1] };
   }
   return null;
 }
 
+function getEmbedUrl(platform, id){
+  switch(platform){
+    case 'youtube': return `https://www.youtube-nocookie.com/embed/${id}`;
+    case 'vimeo': return `https://player.vimeo.com/video/${id}`;
+    case 'dailymotion': return `https://www.dailymotion.com/embed/video/${id}`;
+    case 'twitch': return `https://clips.twitch.tv/embed?clip=${id}`;
+    case 'tiktok': return `https://www.tiktok.com/embed/v2/${id}`;
+    case 'peertube': return `https://peertube.stream/videos/embed/${id}`;
+    default: return null;
+  }
+}
+
 /* =========================================================
-   TIRA DE PERFORACIONES (elemento firma)
+   TIRA DE PERFORACIONES
    ========================================================= */
 (function buildSprocketRail(){
   const rail = document.getElementById('sprocketRail');
@@ -826,6 +1427,7 @@ function goToView(view){
   if (view === 'actividad') fetchActivity();
   if (view === 'perfil') renderProfileView();
   if (view === 'sobre-mi') renderAbout();
+  if (view === 'usuarios') renderUsers();
   if (view === 'escribir') renderWriteAccess();
 }
 document.getElementById('landingGoMuro').addEventListener('click', ()=> goToView('muro'));
@@ -871,7 +1473,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e)=>{
   const errEl = document.getElementById('loginError');
   errEl.textContent = '';
   const btn = document.getElementById('loginSubmit');
-  btn.disabled = true; btn.textContent = 'Entrando…';
+  btn.disabled = true; btn.textContent = t('msgLoggingIn');
   try{
     const { error } = await sb.auth.signInWithPassword({
       email: document.getElementById('loginEmail').value.trim(),
@@ -879,11 +1481,11 @@ document.getElementById('loginForm').addEventListener('submit', async (e)=>{
     });
     if (error) throw error;
     closeAuthModal();
-    showToast('Sesión iniciada ✓');
+    showToast(t('msgSessionStarted'));
   } catch(err){
     errEl.textContent = err.message;
   } finally {
-    btn.disabled = false; btn.textContent = 'Entrar';
+    btn.disabled = false; btn.textContent = t('authLoginBtn');
   }
 });
 
@@ -892,7 +1494,7 @@ document.getElementById('signupForm').addEventListener('submit', async (e)=>{
   const errEl = document.getElementById('signupError');
   errEl.textContent = '';
   const btn = document.getElementById('signupSubmit');
-  btn.disabled = true; btn.textContent = 'Creando…';
+  btn.disabled = true; btn.textContent = t('msgCreating');
   try{
     const username = document.getElementById('signupUsername').value.trim();
     const { data, error } = await sb.auth.signUp({
@@ -901,17 +1503,15 @@ document.getElementById('signupForm').addEventListener('submit', async (e)=>{
     });
     if (error) throw error;
 
-    // el trigger de la base de datos ya creó un profile con username autogenerado;
-    // lo actualizamos con el username elegido por la persona.
     if (data.user){
       await sb.from('profiles').update({ username, display_name: username }).eq('id', data.user.id);
     }
     closeAuthModal();
-    showToast('Cuenta creada ✓');
+    showToast(t('msgAccountCreated'));
   } catch(err){
     errEl.textContent = err.message;
   } finally {
-    btn.disabled = false; btn.textContent = 'Crear cuenta';
+    btn.disabled = false; btn.textContent = t('authSignupBtn');
   }
 });
 
@@ -935,22 +1535,22 @@ function renderAuthWidget(){
         <div class="mini-avatar">${avatarHtml(currentProfile)}</div>
         <div class="who">
           <div class="u">${escapeHtml(currentProfile.display_name || currentProfile.username)}</div>
-          <div class="r">${isAdmin ? 'PROPIETARIO' : '@' + escapeHtml(currentProfile.username)}</div>
+          <div class="r">${isAdmin ? t('msgAdminBadge') : '@' + escapeHtml(currentProfile.username)}</div>
         </div>
       </div>`;
     menu.innerHTML = `
       <button id="menuViewProfile">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.5-6 8-6s8 2 8 6"/></svg>
-        Ver mi perfil
+        ${t('navPerfil')}
       </button>
       <button id="menuSettings">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-        Configuración de cuenta
+        ${t('settingsTitle')}
       </button>
       <hr />
       <button id="menuSignOut" class="danger">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
-        Cerrar sesión
+        ${t('msgProfileSignOut')}
       </button>`;
 
     document.getElementById('authChipBtn').addEventListener('click', (e)=>{
@@ -962,10 +1562,10 @@ function renderAuthWidget(){
     document.getElementById('menuSignOut').addEventListener('click', async ()=>{
       menu.classList.remove('show');
       await sb.auth.signOut();
-      showToast('Sesión cerrada');
+      showToast(t('msgSignedOut'));
     });
   } else {
-    box.innerHTML = `<button class="login-cta" id="loginCta">Iniciar sesión</button>`;
+    box.innerHTML = `<button class="login-cta" id="loginCta">${t('loginBtn')}</button>`;
     menu.innerHTML = '';
     menu.classList.remove('show');
     document.getElementById('loginCta').addEventListener('click', ()=> openAuthModal('login'));
@@ -983,7 +1583,7 @@ document.addEventListener('click', (e)=>{
    ========================================================= */
 const settingsOverlay = document.getElementById('settingsOverlay');
 function openSettingsModal(){
-  document.getElementById('settingsCurrentEmail').textContent = currentUser ? `Sesión actual: ${currentUser.email}` : '';
+  document.getElementById('settingsCurrentEmail').textContent = currentUser ? t('msgSettingsCurrent', { email: currentUser.email }) : '';
   document.getElementById('settingsEmail').value = '';
   document.getElementById('settingsPassword').value = '';
   document.getElementById('settingsError').textContent = '';
@@ -998,21 +1598,21 @@ document.getElementById('settingsForm').addEventListener('submit', async (e)=>{
   errEl.textContent = '';
   const newEmail = document.getElementById('settingsEmail').value.trim();
   const newPassword = document.getElementById('settingsPassword').value;
-  if (!newEmail && !newPassword){ errEl.textContent = 'No hay ningún cambio para guardar.'; return; }
+  if (!newEmail && !newPassword){ errEl.textContent = t('msgNoChanges'); return; }
   const btn = document.getElementById('settingsSubmit');
-  btn.disabled = true; btn.textContent = 'Guardando…';
+  btn.disabled = true; btn.textContent = t('msgSaving');
   try{
     const updates = {};
     if (newEmail) updates.email = newEmail;
     if (newPassword) updates.password = newPassword;
     const { error } = await sb.auth.updateUser(updates);
     if (error) throw error;
-    showToast(newEmail ? 'Revisa tu correo para confirmar el nuevo email ✓' : 'Contraseña actualizada ✓');
+    showToast(newEmail ? t('msgEmailUpdated') : t('msgPasswordUpdated'));
     settingsOverlay.classList.remove('show');
   } catch(err){
     errEl.textContent = err.message;
   } finally {
-    btn.disabled = false; btn.textContent = 'Guardar cambios de cuenta';
+    btn.disabled = false; btn.textContent = t('settingsSubmitBtn');
   }
 });
 
@@ -1034,7 +1634,7 @@ function commentsFor(postId){ return allComments.filter(c => c.post_id === postI
 async function fetchPosts(){
   const feed = document.getElementById('feed');
   if (!sb){
-    feed.innerHTML = `<div class="empty"><div class="icon">⚠</div><div class="big">No se pudo inicializar Supabase</div>Revisa el mensaje de arriba.</div>`;
+    feed.innerHTML = `<div class="empty"><div class="icon">⚠</div><div class="big">${t('msgError')}</div>${t('msgErrorPrefix')} SDK no inicializado.</div>`;
     return;
   }
   const { data: posts, error: postsErr } = await sb
@@ -1044,7 +1644,7 @@ async function fetchPosts(){
   if (postsErr){
     console.error(postsErr);
     setStatus(postsErr.message);
-    feed.innerHTML = `<div class="empty"><div class="icon">⚠</div><div class="big">No se pudo cargar el muro</div>${escapeHtml(postsErr.message)}</div>`;
+    feed.innerHTML = `<div class="empty"><div class="icon">⚠</div><div class="big">${t('msgError')}</div>${escapeHtml(postsErr.message)}</div>`;
     return;
   }
   setStatus(null);
@@ -1066,7 +1666,7 @@ function renderFeed(){
   const posts = activeFilter === 'todos' ? allPosts : allPosts.filter(p => (p.category||'').toLowerCase() === activeFilter);
 
   if (posts.length === 0){
-    feed.innerHTML = `<div class="empty"><div class="icon">◎</div><div class="big">Todavía no hay nada aquí</div>Vuelve pronto por nuevas entradas.</div>`;
+    feed.innerHTML = `<div class="empty"><div class="icon">◎</div><div class="big">${t('msgNoPosts')}</div>${t('msgNoPostsSub')}</div>`;
     return;
   }
 
@@ -1082,16 +1682,41 @@ function postCardHtml(p){
   const liked = userLikedPost(p.id);
   const nLikes = likeCountFor(p.id);
   const nComments = commentsFor(p.id).length;
+
+  // video - SIN sandbox para evitar errores de "Sandboxed embed is not allowed"
+  let videoHtml = '';
+  let videoUrlDirect = p.video_url || null;
+  if (p.video_url) {
+    videoHtml = `<div class="video-embed"><iframe src="${escapeHtml(p.video_url)}" title="${escapeHtml(p.title)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
+  } else if (p.video_platform && p.video_id) {
+    const embed = getEmbedUrl(p.video_platform, p.video_id);
+    if (embed) {
+      videoHtml = `<div class="video-embed"><iframe src="${embed}" title="${escapeHtml(p.title)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
+      if (p.video_platform === 'youtube') videoUrlDirect = `https://www.youtube.com/watch?v=${p.video_id}`;
+      else if (p.video_platform === 'vimeo') videoUrlDirect = `https://vimeo.com/${p.video_id}`;
+      else if (p.video_platform === 'dailymotion') videoUrlDirect = `https://www.dailymotion.com/video/${p.video_id}`;
+      else if (p.video_platform === 'twitch') videoUrlDirect = `https://twitch.tv/${p.video_id}`;
+    }
+  } else if (p.youtube_id) {
+    videoHtml = `<div class="video-embed"><iframe src="https://www.youtube-nocookie.com/embed/${p.youtube_id}" title="${escapeHtml(p.title)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
+    videoUrlDirect = `https://www.youtube.com/watch?v=${p.youtube_id}`;
+  }
+
+  const authorName = p.author ? escapeHtml(p.author.display_name || p.author.username) : 'anon';
+
   return `
     <article class="post" data-cat="${cat}">
       <div class="post-meta">
         <span class="cat-dot ${cat}"></span>
-        <span>${p.category || 'sin categoría'}</span>
+        <span>${p.category || t('msgNoCategory')}</span>
         <span>·</span>
-        <span>${timeAgo(p.created_at)}</span>
+        <span>${formatDateTime(p.created_at)}</span>
+        <span>·</span>
+        <span>por <a class="author-link" href="#" data-userid="${p.author_id}">${authorName}</a></span>
       </div>
       <h3>${escapeHtml(p.title)}</h3>
-      ${p.youtube_id ? `<div class="video-embed"><iframe src="https://www.youtube-nocookie.com/embed/${p.youtube_id}" title="${escapeHtml(p.title)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>` : ''}
+      ${videoHtml}
+      ${videoUrlDirect ? `<div class="video-actions"><a href="${escapeHtml(videoUrlDirect)}" target="_blank" rel="noopener">${t('msgOpenVideo')}</a></div>` : ''}
       ${p.image_url ? `<img src="${p.image_url}" loading="lazy" alt="${escapeHtml(p.title)}" />` : ''}
       <p>${escapeHtml(p.content)}</p>
       <div class="post-actions">
@@ -1108,12 +1733,12 @@ function postCardHtml(p){
         <div class="comments-list" id="commentsList-${p.id}"></div>
         ${currentUser ? `
           <form class="comment-form" data-post="${p.id}">
-            <input type="text" placeholder="Escribe un comentario…" required maxlength="300" />
-            <button type="submit">Enviar</button>
+            <input type="text" placeholder="${t('msgCommentPlaceholder')}" required maxlength="300" />
+            <button type="submit">${t('msgCommentSubmit')}</button>
           </form>
         ` : `
           <div class="comment-login-hint">
-            <button type="button" class="comment-login-btn">Inicia sesión</button> para comentar.
+            <button type="button" class="comment-login-btn">${t('loginBtn')}</button> ${t('msgCommentLogin').replace(t('loginBtn'), '')}
           </div>
         `}
       </div>
@@ -1125,7 +1750,7 @@ function renderComments(postId){
   if (!list) return;
   const items = commentsFor(postId);
   if (items.length === 0){
-    list.innerHTML = `<div class="comment-empty">Todavía no hay comentarios.</div>`;
+    list.innerHTML = `<div class="comment-empty">${t('msgNoComments')}</div>`;
     return;
   }
   list.innerHTML = items.map(c => `
@@ -1139,6 +1764,16 @@ function renderComments(postId){
   `).join('');
 }
 
+// clic en autor del post para ver su perfil
+document.getElementById('feed').addEventListener('click', (e)=>{
+  const authorLink = e.target.closest('.author-link');
+  if (authorLink) {
+    e.preventDefault();
+    viewedProfileId = authorLink.dataset.userid;
+    goToView('perfil');
+  }
+});
+
 document.getElementById('filters').addEventListener('click', (e)=>{
   const chip = e.target.closest('.chip');
   if (!chip) return;
@@ -1148,7 +1783,6 @@ document.getElementById('filters').addEventListener('click', (e)=>{
   renderFeed();
 });
 
-/* Delegación de eventos para likes / comentarios (los posts se re-renderizan) */
 document.getElementById('feed').addEventListener('click', async (e)=>{
   const likeBtn = e.target.closest('.like-btn');
   const commentToggle = e.target.closest('.comment-toggle');
@@ -1180,7 +1814,7 @@ document.getElementById('feed').addEventListener('click', async (e)=>{
       }
       renderFeed();
     } catch(err){
-      showToast('Error: ' + err.message, true);
+      showToast(t('msgErrorPrefix') + err.message, true);
     } finally {
       likeBtn.disabled = false;
     }
@@ -1209,7 +1843,7 @@ document.getElementById('feed').addEventListener('submit', async (e)=>{
     openComments.add(postId);
     renderFeed();
   } catch(err){
-    showToast('Error: ' + err.message, true);
+    showToast(t('msgErrorPrefix') + err.message, true);
   } finally {
     btn.disabled = false;
   }
@@ -1228,6 +1862,8 @@ function renderWriteAccess(){
   } else {
     card.style.display = 'none';
     locked.style.display = 'block';
+    locked.querySelector('.big').textContent = t('msgWriteLocked');
+    locked.querySelector('span').textContent = t('msgWriteLockedSub');
   }
 }
 
@@ -1255,7 +1891,7 @@ fieldImage.addEventListener('change', ()=>{
 });
 function resetDropzone(){
   dropzone.classList.remove('has-image');
-  dropzone.innerHTML = `<span id="dropzoneText">Haz clic para elegir una imagen</span><input type="file" id="fieldImage" accept="image/*" style="display:none" />`;
+  dropzone.innerHTML = `<span id="dropzoneText">${t('writeDropzoneText')}</span><input type="file" id="fieldImage" accept="image/*" style="display:none" />`;
 }
 
 document.getElementById('catSelect').addEventListener('click', (e)=>{
@@ -1269,7 +1905,7 @@ document.getElementById('catSelect').addEventListener('click', (e)=>{
 document.getElementById('postForm').addEventListener('submit', async (e)=>{
   e.preventDefault();
   const btn = document.getElementById('submitBtn');
-  btn.disabled = true; btn.textContent = 'Publicando…';
+  btn.disabled = true; btn.textContent = t('msgSaving');
   try{
     if (!sb || !currentUser) throw new Error('Necesitas iniciar sesión.');
     let imageUrl = null;
@@ -1286,11 +1922,17 @@ document.getElementById('postForm').addEventListener('submit', async (e)=>{
       imageUrl = publicUrlData.publicUrl;
     }
 
-    const youtubeUrlRaw = document.getElementById('fieldYoutube').value.trim();
-    let youtubeId = null;
-    if (youtubeUrlRaw){
-      youtubeId = extractYoutubeId(youtubeUrlRaw);
-      if (!youtubeId) throw new Error('Ese enlace de YouTube no parece válido. Usa un enlace tipo youtube.com/watch?v=... o youtu.be/...');
+    const videoUrl = document.getElementById('fieldVideo').value.trim();
+    let videoPlatform = null, videoId = null, youtubeId = null, videoUrlDirect = null;
+
+    if (videoUrl){
+      videoUrlDirect = videoUrl;
+      const detected = detectVideoPlatform(videoUrl);
+      if (detected) {
+        videoPlatform = detected.platform;
+        videoId = detected.id;
+        if (videoPlatform === 'youtube') youtubeId = videoId;
+      }
     }
 
     const { error: insertError } = await sb.from('posts').insert([{
@@ -1299,11 +1941,14 @@ document.getElementById('postForm').addEventListener('submit', async (e)=>{
       category: selectedCategory,
       image_url: imageUrl,
       youtube_id: youtubeId,
+      video_platform: videoPlatform,
+      video_id: videoId,
+      video_url: videoUrlDirect,
       author_id: currentUser.id
     }]);
     if (insertError) throw insertError;
 
-    showToast('Publicado ✓');
+    showToast(t('msgPostPublished'));
     document.getElementById('postForm').reset();
     selectedFile = null; resetDropzone();
     document.querySelectorAll('.cat-pill').forEach(p=>p.classList.remove('on'));
@@ -1311,9 +1956,9 @@ document.getElementById('postForm').addEventListener('submit', async (e)=>{
     selectedCategory = 'música';
     goToView('muro');
   } catch(err){
-    showToast('Error: ' + err.message, true);
+    showToast(t('msgErrorPrefix') + err.message, true);
   } finally {
-    btn.disabled = false; btn.textContent = 'Publicar';
+    btn.disabled = false; btn.textContent = t('writeSubmitBtn');
   }
 });
 
@@ -1327,7 +1972,7 @@ function exploreCardHtml(p){
       ${thumb ? `<img class="thumb" src="${thumb}" loading="lazy" alt="${escapeHtml(p.title)}" />` : `<div class="thumb-empty">◎</div>`}
       <div class="body">
         <h4>${escapeHtml(p.title)}</h4>
-        <div class="meta">${timeAgo(p.created_at)} · ${likeCountFor(p.id)} likes</div>
+        <div class="meta">${formatDateTime(p.created_at)} · ${likeCountFor(p.id)} ${t('msgLikes')}</div>
       </div>
     </div>`;
 }
@@ -1336,9 +1981,10 @@ function renderExplore(){
   Object.entries(groups).forEach(([cat, id])=>{
     const el = document.getElementById(id);
     const items = allPosts.filter(p => (p.category||'').toLowerCase() === cat);
+    const label = t(`explore${cat.charAt(0).toUpperCase()+cat.slice(1)}Title`) || cat;
     el.innerHTML = items.length
       ? items.map(exploreCardHtml).join('')
-      : `<div class="empty" style="grid-column:1/-1"><div class="icon">◎</div>Todavía no hay entradas de ${cat}.</div>`;
+      : `<div class="empty" style="grid-column:1/-1"><div class="icon">◎</div>${t('msgNoImage', { cat: label })}</div>`;
   });
 }
 document.querySelectorAll('.explore-grid').forEach(grid=>{
@@ -1356,12 +2002,11 @@ document.querySelectorAll('.explore-grid').forEach(grid=>{
    ========================================================= */
 async function fetchActivity(){
   const box = document.getElementById('activityFeed');
-  box.innerHTML = `<div class="loading">cargando actividad…</div>`;
+  box.innerHTML = `<div class="loading">${t('msgActivityLoading')}</div>`;
 
   const likeEvents = allLikes.map(l => ({ type:'like', created_at:l.created_at, user_id:l.user_id, post_id:l.post_id }));
   const commentEvents = allComments.map(c => ({ type:'comment', created_at:c.created_at, user_id:c.user_id, post_id:c.post_id, author:c.author, content:c.content }));
 
-  // aseguramos que tenemos autores para los likes también
   const missingProfileIds = [...new Set(likeEvents.map(e=>e.user_id))];
   let profilesMap = {};
   if (missingProfileIds.length){
@@ -1372,22 +2017,22 @@ async function fetchActivity(){
   const events = [...likeEvents, ...commentEvents].sort((a,b)=> new Date(b.created_at) - new Date(a.created_at)).slice(0, 30);
 
   if (events.length === 0){
-    box.innerHTML = `<div class="empty"><div class="icon">◎</div><div class="big">Sin actividad todavía</div>Los likes y comentarios aparecerán aquí.</div>`;
+    box.innerHTML = `<div class="empty"><div class="icon">◎</div><div class="big">${t('msgNoActivity')}</div>${t('msgNoActivitySub')}</div>`;
     return;
   }
 
   box.innerHTML = events.map(ev => {
     const post = allPosts.find(p => p.id === ev.post_id);
     const author = ev.author || profilesMap[ev.user_id];
-    const name = escapeHtml((author && (author.display_name || author.username)) || 'alguien');
-    const title = escapeHtml(post ? post.title : 'una entrada');
+    const name = escapeHtml((author && (author.display_name || author.username)) || t('msgSomeone'));
+    const title = escapeHtml(post ? post.title : t('msgOneEntry'));
     if (ev.type === 'like'){
       return `
         <div class="activity-item like">
           <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 21s-7-4.35-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6C19 16.65 12 21 12 21z"/></svg>
           <div>
-            <div class="activity-text"><b>${name}</b> le dio like a «${title}»</div>
-            <div class="activity-time">${timeAgo(ev.created_at)}</div>
+            <div class="activity-text"><b>${name}</b> ${t('msgLiked', { title })}</div>
+            <div class="activity-time">${formatDateTime(ev.created_at)}</div>
           </div>
         </div>`;
     }
@@ -1395,54 +2040,123 @@ async function fetchActivity(){
       <div class="activity-item comment">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 11.5a8.38 8.38 0 0 1-8.9 8.4 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7a8.5 8.5 0 0 1-.9-3.8A8.38 8.38 0 0 1 12.5 3a8.5 8.5 0 0 1 8.5 8.5z"/></svg>
         <div>
-          <div class="activity-text"><b>${name}</b> comentó en «${title}»: "${escapeHtml(ev.content)}"</div>
-          <div class="activity-time">${timeAgo(ev.created_at)}</div>
+          <div class="activity-text"><b>${name}</b> ${t('msgCommented', { title, content: escapeHtml(ev.content) })}</div>
+          <div class="activity-time">${formatDateTime(ev.created_at)}</div>
         </div>
       </div>`;
   }).join('');
 }
 
 /* =========================================================
-   PERFIL
+   USUARIOS
+   ========================================================= */
+async function renderUsers(){
+  const box = document.getElementById('usersList');
+  box.innerHTML = `<div class="loading">${t('usuariosLoading')}</div>`;
+  try {
+    const { data, error } = await sb.from('profiles').select('*').order('created_at', { ascending: true });
+    if (error) throw error;
+    if (!data || data.length === 0) {
+      box.innerHTML = `<div class="empty"><div class="icon">👥</div><div class="big">${t('msgNoUsers')}</div></div>`;
+      return;
+    }
+    box.innerHTML = `<div class="users-grid">${data.map(u => `
+      <div class="user-card" data-userid="${u.id}">
+        <div class="avatar">${avatarHtml(u)}</div>
+        <div class="name">${escapeHtml(u.display_name || u.username)}</div>
+        <div class="handle">@${escapeHtml(u.username)}</div>
+        ${u.bio ? `<div class="bio">${escapeHtml(u.bio)}</div>` : ''}
+        <div style="font-size:11px;color:var(--text-dim);margin-top:8px;">${t('msgUserJoined', { date: formatDate(u.created_at) })}</div>
+      </div>
+    `).join('')}</div>`;
+    box.querySelectorAll('.user-card').forEach(card => {
+      card.addEventListener('click', () => {
+        viewedProfileId = card.dataset.userid;
+        goToView('perfil');
+      });
+    });
+  } catch(err) {
+    box.innerHTML = `<div class="empty"><div class="icon">⚠</div><div class="big">${t('msgError')}</div>${escapeHtml(err.message)}</div>`;
+  }
+}
+
+/* =========================================================
+   PERFIL (personalizable con banner)
    ========================================================= */
 function renderProfileView(){
   const box = document.getElementById('profileContent');
+  if (viewedProfileId && viewedProfileId !== (currentUser ? currentUser.id : null)) {
+    renderPublicProfile(viewedProfileId);
+    return;
+  }
   if (!currentUser){
     box.innerHTML = `
       <div class="empty">
         <div class="icon">👤</div>
-        <div class="big">No has iniciado sesión</div>
-        Crea una cuenta o entra para ver y editar tu perfil.
+        <div class="big">${t('msgNotLoggedIn')}</div>
+        ${t('msgNotLoggedInSub')}
       </div>`;
     return;
   }
   const p = currentProfile;
+  if (!p) { box.innerHTML = `<div class="loading">${t('profileLoading')}</div>`; return; }
+
+  const bannerStyle = p.banner_url ? `background-image:url(${p.banner_url});background-size:cover;background-position:center;` :
+                     (p.banner_color ? `background-color:${p.banner_color};` : 'background:linear-gradient(135deg, var(--music), var(--cine));');
+
   box.innerHTML = `
     <div class="profile-card">
+      <div class="profile-banner" style="${bannerStyle}"></div>
       <div class="profile-head">
         <div class="avatar">${avatarHtml(p)}</div>
-        <div>
+        <div class="info">
           <h2>${escapeHtml(p.display_name || p.username)}</h2>
           <div class="handle">@${escapeHtml(p.username)}</div>
-          ${isAdmin ? '<div class="badge-admin">PROPIETARIO</div>' : ''}
+          ${isAdmin ? `<div class="badge-admin">${t('msgAdminBadge')}</div>` : ''}
+          ${(p.location || p.website) ? `<div class="profile-extra">
+            ${p.location ? `<span>📍 ${escapeHtml(p.location)}</span>` : ''}
+            ${p.website ? `<span><a href="${escapeHtml(p.website)}" target="_blank" rel="noopener">${escapeHtml(p.website)}</a></span>` : ''}
+          </div>` : ''}
         </div>
       </div>
+      ${p.bio ? `<p class="profile-bio">${escapeHtml(p.bio)}</p>` : ''}
 
-      <label>Nombre para mostrar</label>
-      <input type="text" id="editDisplayName" value="${escapeHtml(p.display_name || '')}" maxlength="40" />
+      <div class="profile-form-fields">
+        <label>${t('msgProfileDisplayName')}</label>
+        <input type="text" id="editDisplayName" value="${escapeHtml(p.display_name || '')}" maxlength="40" />
 
-      <label>Bio</label>
-      <textarea id="editBio" maxlength="240" style="min-height:90px;">${escapeHtml(p.bio || '')}</textarea>
+        <label>${t('msgProfileBio')}</label>
+        <textarea id="editBio" maxlength="240" style="min-height:90px;">${escapeHtml(p.bio || '')}</textarea>
 
-      <label>Foto de perfil</label>
-      <div class="dropzone" id="avatarDropzone">
-        ${p.avatar_url ? `<img src="${p.avatar_url}" style="max-height:160px;" />` : `<span>Haz clic para elegir una imagen</span>`}
-        <input type="file" id="avatarInput" accept="image/*" style="display:none" />
-      </div>
+        <label>${t('profileLocationLabel')}</label>
+        <input type="text" id="editLocation" value="${escapeHtml(p.location || '')}" placeholder="${t('profileLocationPlaceholder')}" maxlength="80" />
 
-      <div class="profile-actions" style="margin-top:22px;">
-        <button class="submit-btn" id="saveProfileBtn">Guardar cambios</button>
-        <button class="submit-btn ghost" id="signOutBtn">Cerrar sesión</button>
+        <label>${t('profileWebsiteLabel')}</label>
+        <input type="url" id="editWebsite" value="${escapeHtml(p.website || '')}" placeholder="${t('profileWebsitePlaceholder')}" maxlength="200" />
+
+        <label>${t('profileBannerLabel')}</label>
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <div style="flex:1; min-width:120px;">
+            <input type="color" id="editBannerColor" value="${p.banner_color || '#8b7cf0'}" style="width:100%; padding:4px; height:48px;" />
+          </div>
+          <div style="flex:2; min-width:160px;">
+            <div class="dropzone" id="bannerDropzone" style="padding:10px; min-height:50px;">
+              ${p.banner_url ? `<img src="${p.banner_url}" style="max-height:120px; width:auto; margin:0 auto;" />` : `<span style="font-size:12px;">${t('profileBannerImage')}</span>`}
+              <input type="file" id="bannerInput" accept="image/*" style="display:none" />
+            </div>
+          </div>
+        </div>
+
+        <label>${t('msgProfileAvatar')}</label>
+        <div class="dropzone" id="avatarDropzone">
+          ${p.avatar_url ? `<img src="${p.avatar_url}" style="max-height:160px;" />` : `<span>${t('writeDropzoneText')}</span>`}
+          <input type="file" id="avatarInput" accept="image/*" style="display:none" />
+        </div>
+
+        <div class="profile-actions" style="margin-top:22px;">
+          <button class="submit-btn" id="saveProfileBtn">${t('msgProfileSave')}</button>
+          <button class="submit-btn ghost" id="signOutBtn">${t('msgProfileSignOut')}</button>
+        </div>
       </div>
     </div>`;
 
@@ -1450,9 +2164,13 @@ function renderProfileView(){
   let avatarFile = null;
   document.getElementById('avatarInput').addEventListener('change', (e)=>{ avatarFile = e.target.files[0] || null; });
 
+  document.getElementById('bannerDropzone').addEventListener('click', ()=> document.getElementById('bannerInput').click());
+  let bannerFile = null;
+  document.getElementById('bannerInput').addEventListener('change', (e)=>{ bannerFile = e.target.files[0] || null; });
+
   document.getElementById('saveProfileBtn').addEventListener('click', async ()=>{
     const btn = document.getElementById('saveProfileBtn');
-    btn.disabled = true; btn.textContent = 'Guardando…';
+    btn.disabled = true; btn.textContent = t('msgSaving');
     try{
       let avatar_url = p.avatar_url || null;
       if (avatarFile){
@@ -1461,46 +2179,106 @@ function renderProfileView(){
         if (upErr) throw upErr;
         avatar_url = sb.storage.from(STORAGE_BUCKET).getPublicUrl(path).data.publicUrl;
       }
+
+      let banner_url = p.banner_url || null;
+      if (bannerFile){
+        const path = `banner-${currentUser.id}-${Date.now()}-${bannerFile.name}`;
+        const { error: upErr } = await sb.storage.from(STORAGE_BUCKET).upload(path, bannerFile);
+        if (upErr) throw upErr;
+        banner_url = sb.storage.from(STORAGE_BUCKET).getPublicUrl(path).data.publicUrl;
+      }
+
+      const banner_color = document.getElementById('editBannerColor').value.trim();
+
       const updates = {
         display_name: document.getElementById('editDisplayName').value.trim(),
         bio: document.getElementById('editBio').value.trim(),
-        avatar_url
+        location: document.getElementById('editLocation').value.trim(),
+        website: document.getElementById('editWebsite').value.trim(),
+        banner_url: banner_url,
+        banner_color: banner_color,
+        avatar_url: avatar_url
       };
+      Object.keys(updates).forEach(k => updates[k] === undefined && delete updates[k]);
+
       const { error } = await sb.from('profiles').update(updates).eq('id', currentUser.id);
       if (error) throw error;
       currentProfile = { ...currentProfile, ...updates };
       renderAuthWidget();
       renderProfileView();
-      showToast('Perfil actualizado ✓');
+      showToast(t('msgProfileUpdated'));
     } catch(err){
-      showToast('Error: ' + err.message, true);
+      showToast(t('msgErrorPrefix') + err.message, true);
     } finally {
-      btn.disabled = false; btn.textContent = 'Guardar cambios';
+      btn.disabled = false; btn.textContent = t('msgProfileSave');
     }
   });
 
   document.getElementById('signOutBtn').addEventListener('click', async ()=>{
     await sb.auth.signOut();
-    showToast('Sesión cerrada');
+    showToast(t('msgSignedOut'));
   });
 }
 
+async function renderPublicProfile(userId){
+  const box = document.getElementById('profileContent');
+  try {
+    const { data: p, error } = await sb.from('profiles').select('*').eq('id', userId).single();
+    if (error || !p) throw error || new Error('Usuario no encontrado');
+
+    const bannerStyle = p.banner_url ? `background-image:url(${p.banner_url});background-size:cover;background-position:center;` :
+                       (p.banner_color ? `background-color:${p.banner_color};` : 'background:linear-gradient(135deg, var(--music), var(--cine));');
+
+    box.innerHTML = `
+      <div class="profile-card">
+        <div class="profile-banner" style="${bannerStyle}"></div>
+        <div class="profile-head">
+          <div class="avatar">${avatarHtml(p)}</div>
+          <div class="info">
+            <h2>${escapeHtml(p.display_name || p.username)}</h2>
+            <div class="handle">@${escapeHtml(p.username)}</div>
+            ${p.is_admin ? `<div class="badge-admin">${t('msgAdminBadge')}</div>` : ''}
+            ${(p.location || p.website) ? `<div class="profile-extra">
+              ${p.location ? `<span>📍 ${escapeHtml(p.location)}</span>` : ''}
+              ${p.website ? `<span><a href="${escapeHtml(p.website)}" target="_blank" rel="noopener">${escapeHtml(p.website)}</a></span>` : ''}
+            </div>` : ''}
+          </div>
+        </div>
+        ${p.bio ? `<p class="profile-bio">${escapeHtml(p.bio)}</p>` : ''}
+        <div style="margin-top:12px; font-size:13px; color:var(--text-dim);">${t('msgUserJoined', { date: formatDate(p.created_at) })}</div>
+      </div>`;
+  } catch(err) {
+    box.innerHTML = `<div class="empty"><div class="icon">⚠</div><div class="big">${t('msgError')}</div>${escapeHtml(err.message)}</div>`;
+  }
+}
+
 /* =========================================================
-   SOBRE MÍ
+   SOBRE MÍ (diseño mejorado sin corte)
    ========================================================= */
 async function renderAbout(){
   const box = document.getElementById('aboutContent');
   const { data: admin } = await sb.from('profiles').select('*').eq('is_admin', true).limit(1).maybeSingle();
+
+  const bannerStyle = admin?.banner_url ? `background-image:url(${admin.banner_url});background-size:cover;background-position:center;` :
+                     (admin?.banner_color ? `background-color:${admin.banner_color};` : 'background:linear-gradient(135deg, var(--music), var(--cine));');
+
   box.innerHTML = `
-    <div class="profile-card">
+    <div class="profile-card profile-no-banner">
+      ${admin ? `<div class="profile-banner" style="${bannerStyle}"></div>` : ''}
       <div class="profile-head">
-        <div class="avatar">${admin ? avatarHtml(admin) : 'EC'}</div>
-        <div>
-          <h2>${admin ? escapeHtml(admin.display_name || admin.username) : 'el cuaderno'}</h2>
-          <div class="handle">${admin ? '@'+escapeHtml(admin.username) : 'un diario personal'}</div>
+        <div class="avatar" style="width:80px;height:80px;font-size:32px;">${admin ? avatarHtml(admin) : 'EC'}</div>
+        <div class="info">
+          <h2>${admin ? escapeHtml(admin.display_name || admin.username) : t('brand')}</h2>
+          <div class="handle">${admin ? '@'+escapeHtml(admin.username) : t('brand')}</div>
+          ${admin?.is_admin ? `<div class="badge-admin">${t('msgAdminBadge')}</div>` : ''}
         </div>
       </div>
-      <p class="profile-bio">${admin && admin.bio ? escapeHtml(admin.bio) : 'Este es un diario personal sobre música, fotografía y cine — un lugar para archivar lo que escucho, lo que fotografío y lo que veo. Crea una cuenta para comentar y dar like a las entradas.'}</p>
+      <div style="padding:0 26px 20px;">
+        <p class="profile-bio">${admin && admin.bio ? escapeHtml(admin.bio) : t('msgAboutDefault')}</p>
+        ${admin?.location ? `<div style="font-size:13px;color:var(--text-dim);margin-top:6px;">📍 ${escapeHtml(admin.location)}</div>` : ''}
+        ${admin?.website ? `<div style="font-size:13px;color:var(--text-dim);margin-top:2px;"><a href="${escapeHtml(admin.website)}" target="_blank" rel="noopener" style="color:var(--photo);">${escapeHtml(admin.website)}</a></div>` : ''}
+        <div style="margin-top:12px; font-size:12px; color:var(--text-dim);">${t('msgUserJoined', { date: admin ? formatDate(admin.created_at) : '' })}</div>
+      </div>
     </div>`;
 }
 
@@ -1524,9 +2302,12 @@ function subscribeRealtime(){
 }
 
 /* =========================================================
-   INICIO / SESIÓN
+   INICIO
    ========================================================= */
 async function init(){
+  currentTranslations = translations[currentLang] || translations.es;
+  applyLanguage();
+
   if (sb){
     const { data: { session } } = await sb.auth.getSession();
     currentUser = session ? session.user : null;
@@ -1534,10 +2315,11 @@ async function init(){
 
     sb.auth.onAuthStateChange(async (_event, session)=>{
       currentUser = session ? session.user : null;
+      viewedProfileId = null;
       await loadCurrentProfile();
       renderFeed();
       renderWriteAccess();
-      if (document.querySelector('.side-link[data-view="perfil"]').classList.contains('active')) renderProfileView();
+      if (document.querySelector('.side-link[data-view="perfil"]')?.classList.contains('active')) renderProfileView();
     });
   }
   await fetchPosts();
@@ -1546,7 +2328,7 @@ async function init(){
 
 init();
 
-})(); // fin del IIFE
+})();
 </script>
 </body>
 </html>
