@@ -47,7 +47,7 @@
   a, button{ font-family:inherit; }
   svg{ display:block; }
 
-  /* ---------- SIDEBAR ---------- */
+  /* ---------- SIDEBAR (escritorio) ---------- */
   .app{ display:flex; min-height:100vh; }
   .sidebar{
     position:fixed; top:0; left:0; bottom:0;
@@ -100,8 +100,16 @@
     display:flex; align-items:center; justify-content:center;
     font-family:'Fraunces', serif; font-weight:600; font-size:13px; color:#0e0d0b;
     overflow:hidden;
+    border:none !important;
+    outline:none !important;
   }
-  .mini-avatar img{ width:100%; height:100%; object-fit:cover; }
+  .mini-avatar img{
+    border:none !important;
+    outline:none !important;
+    display:block;
+    width:100%; height:100%;
+    object-fit:cover;
+  }
   .auth-chip .who{ min-width:0; }
   .auth-chip .who .u{ font-size:13px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .auth-chip .who .r{ font-size:10.5px; color:var(--text-dim); font-family:'JetBrains Mono', monospace; }
@@ -181,8 +189,16 @@
     display:flex; align-items:center; justify-content:center;
     font-family:'Fraunces', serif; font-weight:600; font-size:20px; color:#0e0d0b;
     overflow:hidden;
+    border:none !important;
+    outline:none !important;
   }
-  .avatar img{ width:100%; height:100%; object-fit:cover; }
+  .avatar img{
+    border:none !important;
+    outline:none !important;
+    display:block;
+    width:100%; height:100%;
+    object-fit:cover;
+  }
   .hero-text .greeting{ font-family:'Fraunces', serif; font-size:24px; font-weight:600; }
   .hero-text .sub{ font-size:13px; color:var(--text-dim); margin-top:2px; }
   .stats{ display:flex; gap:18px; margin:0 0 22px; padding:14px 18px; background:var(--surface); border:1px solid var(--border); border-radius:12px; }
@@ -227,7 +243,10 @@
   .post-meta .author-link:hover{ color:var(--photo); }
 
   .post h3{ font-family:'Fraunces', serif; font-size:20px; font-weight:600; margin:0 0 8px; }
-  .post p{ margin:0 0 12px; font-size:14.5px; line-height:1.6; color:#d8d3c9; white-space:pre-wrap; }
+  .post .content-html{ margin:0 0 12px; font-size:14.5px; line-height:1.6; color:#d8d3c9; white-space:pre-wrap; word-break:break-word; }
+  .post .content-html p{ margin:0 0 0.5em; }
+  .post .content-html a{ color:var(--photo); text-decoration:none; }
+  .post .content-html a:hover{ text-decoration:underline; }
   .post img{ width:100%; max-height:420px; object-fit:cover; border-radius:10px; display:block; border:1px solid var(--border); margin-bottom:4px; }
   .video-embed{ position:relative; width:100%; padding-top:56.25%; border-radius:10px; overflow:hidden; border:1px solid var(--border); margin-bottom:12px; background:#000; }
   .video-embed iframe{ position:absolute; inset:0; width:100%; height:100%; border:none; }
@@ -235,7 +254,7 @@
   .video-actions a{ font-size:12px; color:var(--photo); text-decoration:none; font-weight:500; }
   .video-actions a:hover{ text-decoration:underline; }
 
-  .post-actions{ display:flex; gap:6px; margin-top:10px; border-top:1px solid var(--border); padding-top:10px; }
+  .post-actions{ display:flex; gap:6px; margin-top:10px; border-top:1px solid var(--border); padding-top:10px; flex-wrap:wrap; }
   .action-btn{
     display:flex; align-items:center; gap:7px;
     background:transparent; border:none; color:var(--text-dim);
@@ -246,11 +265,14 @@
   .action-btn svg{ width:17px; height:17px; }
   .action-btn.liked{ color:var(--danger); }
   .action-btn.liked svg{ fill:var(--danger); stroke:var(--danger); }
+  .action-btn.delete-btn{ color:var(--danger); }
+  .action-btn.delete-btn:hover{ background:rgba(227,103,91,0.15); color:var(--danger); }
 
   .comments-panel{ margin-top:10px; padding-top:10px; border-top:1px solid var(--border); }
   .comments-list{ display:flex; flex-direction:column; gap:10px; margin-bottom:10px; }
   .comment-item{ display:flex; gap:10px; }
-  .comment-item .mini-avatar{ width:28px; height:28px; font-size:11px; }
+  .comment-item .mini-avatar{ width:28px; height:28px; font-size:11px; border:none; outline:none; }
+  .comment-item .mini-avatar img{ border:none !important; outline:none !important; display:block; width:100%; height:100%; object-fit:cover; }
   .comment-body{ background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:8px 12px; flex:1; }
   .comment-body .cu{ font-size:12.5px; font-weight:600; }
   .comment-body .cu button{ background:none; border:none; color:inherit; font-weight:600; font-size:12.5px; cursor:pointer; padding:0; }
@@ -313,6 +335,27 @@
     display:flex; align-items:center; justify-content:center;
   }
 
+  /* editor de texto enriquecido */
+  .editor-toolbar{
+    display:flex; gap:4px; flex-wrap:wrap; margin-bottom:8px;
+    background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:6px 8px;
+  }
+  .editor-toolbar button{
+    background:transparent; border:1px solid transparent; border-radius:6px;
+    color:var(--text-dim); font-size:13px; padding:4px 8px; cursor:pointer;
+    transition:background .2s, border-color .2s;
+  }
+  .editor-toolbar button:hover{ background:var(--surface-hover); border-color:var(--border); }
+  .editor-toolbar button.active{ background:var(--surface); border-color:var(--text-dim); color:var(--text); }
+  .editor-content{
+    background:var(--bg); border:1px solid var(--border); border-radius:10px;
+    padding:12px 14px; min-height:140px; color:var(--text); font-size:14.5px; line-height:1.5;
+    outline:none; overflow-y:auto; white-space:pre-wrap; word-break:break-word;
+  }
+  .editor-content:focus{ border-color:var(--text-dim); }
+  .editor-content p{ margin:0 0 0.5em; }
+  .editor-content a{ color:var(--photo); text-decoration:underline; }
+
   .submit-btn{
     width:100%; margin-top:22px; padding:13px; background:var(--text); color:#0e0d0b;
     border:none; border-radius:10px; font-size:14.5px; font-weight:600; cursor:pointer;
@@ -358,26 +401,20 @@
     padding:18px; text-align:center; cursor:pointer; transition:transform .2s, border-color .2s;
   }
   .user-card:hover{ transform:translateY(-3px); border-color:#3a352f; }
-  .user-card .avatar{ width:60px; height:60px; margin:0 auto 10px; font-size:24px; }
+  .user-card .avatar{ width:60px; height:60px; margin:0 auto 10px; font-size:24px; border:none; }
+  .user-card .avatar img{ border:none !important; outline:none !important; display:block; width:100%; height:100%; object-fit:cover; }
   .user-card .name{ font-family:'Fraunces', serif; font-size:16px; font-weight:600; }
   .user-card .handle{ font-size:12px; color:var(--text-dim); font-family:'JetBrains Mono', monospace; }
   .user-card .bio{ font-size:13px; color:#d8d3c9; margin-top:6px; line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
 
-  /* ---------- PERFIL (personalizado) ---------- */
-  .profile-banner{
-    width:100%; height:140px; border-radius:var(--radius) var(--radius) 0 0;
-    background:linear-gradient(135deg, var(--music), var(--cine));
-    position:relative;
-    margin:-26px -26px 0 -26px;
-    overflow:hidden;
-  }
-  .profile-banner img{ width:100%; height:100%; object-fit:cover; display:block; }
+  /* ---------- PERFIL (sin banner) ---------- */
   .profile-card{ padding-top:0; overflow:hidden; }
   .profile-head{
-    display:flex; align-items:flex-end; gap:16px; padding:0 26px 18px;
-    margin-top:-30px; position:relative; z-index:2;
+    display:flex; align-items:flex-end; gap:16px; padding:18px 26px 18px;
+    position:relative; z-index:2;
   }
-  .profile-head .avatar{ width:72px; height:72px; font-size:28px; border:3px solid var(--surface); }
+  .profile-head .avatar{ width:72px; height:72px; font-size:28px; border:3px solid var(--surface); border:none; }
+  .profile-head .avatar img{ border:none !important; outline:none !important; display:block; width:100%; height:100%; object-fit:cover; }
   .profile-head .info{ flex:1; }
   .profile-head .info h2{ font-family:'Fraunces', serif; font-size:22px; margin:0; }
   .profile-head .info .handle{ font-size:13px; color:var(--text-dim); font-family:'JetBrains Mono', monospace; }
@@ -386,17 +423,9 @@
   .profile-extra svg{ width:14px; height:14px; display:inline-block; vertical-align:middle; margin-right:4px; }
   .profile-extra a{ color:var(--photo); text-decoration:none; }
   .profile-extra a:hover{ text-decoration:underline; }
+  .profile-bio{ padding:0 26px 20px; margin:0; font-size:14px; line-height:1.6; color:#d8d3c9; }
 
   .profile-form-fields{ margin-top:20px; }
-
-  /* Estilo para "Sobre mí" sin banner */
-  .profile-no-banner .profile-head{
-    margin-top:0;
-    padding-top:18px;
-  }
-  .profile-no-banner .profile-banner{
-    display:none;
-  }
 
   /* ---------- MODAL (auth) ---------- */
   .modal-overlay{
@@ -462,32 +491,75 @@
   .lang-btn:hover{ color:var(--text); background:var(--surface-hover); }
   .lang-btn.active{ background:var(--text); color:#0e0d0b; }
 
+  /* ---------- NOTIFICACIONES ---------- */
+  .notification-item{
+    display:flex; gap:12px; padding:12px 0; border-bottom:1px solid var(--border);
+    align-items:center;
+  }
+  .notification-item:last-child{ border-bottom:none; }
+  .notification-item .notif-icon{ font-size:18px; flex:0 0 auto; }
+  .notification-item .notif-text{ font-size:13.5px; line-height:1.4; flex:1; }
+  .notification-item .notif-text a{ color:var(--photo); text-decoration:none; }
+  .notification-item .notif-text a:hover{ text-decoration:underline; }
+  .notification-item .notif-time{ font-size:11px; color:var(--text-dim); }
+  .notification-item .notif-read{ opacity:0.6; }
+  .notification-item .notif-read .notif-text{ font-weight:400; }
+  .notification-item .notif-unread .notif-text{ font-weight:600; }
+  .notif-mark-read{
+    background:var(--surface-hover); border:none; border-radius:999px;
+    color:var(--text-dim); padding:4px 10px; font-size:11px; cursor:pointer;
+    transition:background .2s;
+  }
+  .notif-mark-read:hover{ background:var(--text); color:#0e0d0b; }
+
   /* ---------- RESPONSIVE ---------- */
   @media (max-width:860px){
     .sidebar{
-      flex-direction:row; align-items:center; gap:4px;
-      top:0; left:0; right:0; bottom:auto; width:100%;
-      height:calc(60px + env(safe-area-inset-top));
-      padding:env(safe-area-inset-top) 8px 0;
-      border-right:none; border-bottom:1px solid var(--border);
+      position:fixed; bottom:0; left:0; right:0; top:auto;
+      flex-direction:row; align-items:center; justify-content:space-around;
+      width:100%; height:auto; min-height:60px;
+      background:rgba(23,21,18,0.96);
+      backdrop-filter:blur(10px);
+      border-right:none; border-top:1px solid var(--border);
+      padding:4px 8px calc(4px + env(safe-area-inset-bottom,0px));
+      gap:2px;
+      z-index:150;
     }
     .brand{ display:none; }
     .side-nav{
-      flex-direction:row; flex:1; overflow-x:auto; gap:2px;
-      -webkit-overflow-scrolling:touch;
+      flex-direction:row; flex:1; gap:1px;
+      overflow-x:auto; -webkit-overflow-scrolling:touch;
     }
     .side-nav::-webkit-scrollbar{ display:none; }
-    .side-link{ flex:0 0 auto; padding:10px; min-width:40px; display:flex; justify-content:center; }
-    .side-link .label{ display:none; }
-    .write-fab{ flex:0 0 auto; margin:0; padding:10px 14px; }
+    .side-link{
+      flex:1 0 auto; padding:6px 4px; min-width:40px;
+      flex-direction:column; align-items:center; gap:2px;
+      font-size:10px; border-radius:8px;
+    }
+    .side-link svg{ width:20px; height:20px; }
+    .side-link .label{
+      display:block; font-size:8px; letter-spacing:0.3px;
+      white-space:nowrap; max-width:48px; overflow:hidden; text-overflow:ellipsis;
+    }
+    .write-fab{
+      flex:0 0 auto; margin:0; padding:6px 10px; border-radius:8px;
+    }
     .write-fab .label{ display:none; }
-    .sidebar-auth{ margin-top:0; padding-top:0; border-top:none; flex:0 0 auto; }
+    .sidebar-auth{
+      margin:0; padding:0; border-top:none; flex:0 0 auto;
+      display:flex; align-items:center;
+    }
     .auth-chip .who{ display:none; }
-    .login-cta{ width:auto; padding:8px 12px; font-size:12px; white-space:nowrap; }
+    .login-cta{ width:auto; padding:6px 10px; font-size:11px; white-space:nowrap; }
     .sprocket-rail{ display:none; }
-    .content{ margin-left:0; padding:calc(60px + env(safe-area-inset-top) + 16px) 16px calc(90px + env(safe-area-inset-bottom)); }
+    .content{
+      margin-left:0; padding:calc(12px + env(safe-area-inset-top,0px)) 12px calc(80px + env(safe-area-inset-bottom,0px));
+    }
     .explore-grid{ grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); }
-    .account-menu{ left:auto; right:8px; bottom:auto; top:calc(60px + env(safe-area-inset-top) + 4px); width:min(260px, 84vw); }
+    .account-menu{
+      left:auto; right:8px; bottom:calc(70px + env(safe-area-inset-bottom,0px));
+      top:auto; width:min(260px, 84vw);
+    }
 
     .hero{ gap:12px; margin-bottom:18px; }
     .hero-text .greeting{ font-size:20px; }
@@ -509,8 +581,7 @@
 
     .profile-head{ flex-wrap:wrap; }
     .profile-actions{ flex-direction:column; }
-    .profile-banner{ height:100px; margin:-26px -26px 0; }
-    .profile-head .avatar{ width:56px; height:56px; font-size:22px; margin-top:-20px; }
+    .profile-head .avatar{ width:56px; height:56px; font-size:22px; }
 
     .lang-selector{ top:8px; right:8px; padding:4px 8px; gap:4px; }
     .lang-btn{ font-size:10px; padding:3px 6px; }
@@ -519,15 +590,16 @@
   }
 
   @media (max-width:420px){
-    .content{ padding-left:12px; padding-right:12px; }
+    .content{ padding-left:8px; padding-right:8px; }
     .landing-hero h1{ font-size:23px; }
     .landing-card{ padding:18px; }
     .stats{ flex-wrap:wrap; gap:10px 16px; }
-    .filters{ gap:6px; }
-    .chip{ padding:6px 11px; font-size:10.5px; }
+    .filters{ gap:4px; }
+    .chip{ padding:5px 10px; font-size:10px; }
     .lang-selector{ top:6px; right:6px; }
     .lang-btn{ font-size:9px; padding:2px 5px; }
     .users-grid{ grid-template-columns:1fr 1fr; }
+    .side-link .label{ font-size:7px; max-width:36px; }
   }
 </style>
 </head>
@@ -556,6 +628,10 @@
       <button class="side-link" data-view="actividad">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M9.5 20a2.5 2.5 0 0 0 5 0"/></svg>
         <span class="label" data-i18n="navActividad">Actividad</span>
+      </button>
+      <button class="side-link" data-view="notificaciones">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="label" data-i18n="navNotificaciones">Notif.</span>
       </button>
       <button class="side-link" data-view="perfil">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.5-6 8-6s8 2 8 6"/></svg>
@@ -686,7 +762,18 @@
             </div>
 
             <label data-i18n="writeLabelContent">Contenido</label>
-            <textarea id="fieldContent" placeholder="" required data-i18n-placeholder="writePlaceholderContent"></textarea>
+            <!-- Editor enriquecido -->
+            <div class="editor-toolbar" id="editorToolbar">
+              <button type="button" data-cmd="bold" title="Negrita"><b>B</b></button>
+              <button type="button" data-cmd="italic" title="Cursiva"><i>I</i></button>
+              <button type="button" data-cmd="underline" title="Subrayado"><u>U</u></button>
+              <button type="button" data-cmd="justifyLeft" title="Alinear izquierda">≡←</button>
+              <button type="button" data-cmd="justifyCenter" title="Centrar">≡↔</button>
+              <button type="button" data-cmd="justifyRight" title="Alinear derecha">≡→</button>
+              <button type="button" data-cmd="createLink" title="Insertar enlace">🔗</button>
+            </div>
+            <div class="editor-content" id="editorContent" contenteditable="true" data-placeholder="Escribe lo que quieras contar…"></div>
+            <input type="hidden" id="fieldContent" />
 
             <label data-i18n="writeLabelImage">Imagen (opcional)</label>
             <div class="dropzone" id="dropzone">
@@ -735,6 +822,15 @@
         <div class="page-title" data-i18n="activityTitle">Actividad</div>
         <p class="page-sub" data-i18n="activitySub">Lo último que la comunidad comentó y le gustó.</p>
         <div id="activityFeed"><div class="loading" data-i18n="activityLoading">cargando actividad…</div></div>
+      </div>
+    </section>
+
+    <!-- NOTIFICACIONES -->
+    <section class="view" data-view-section="notificaciones">
+      <div class="view-inner">
+        <div class="page-title" data-i18n="notificacionesTitle">Notificaciones</div>
+        <p class="page-sub" data-i18n="notificacionesSub">Menciones y otras alertas.</p>
+        <div id="notificationsFeed"><div class="loading" data-i18n="notificacionesLoading">cargando notificaciones…</div></div>
       </div>
     </section>
 
@@ -824,7 +920,7 @@
 (function(){
 
 /* =========================================================
-   TRADUCCIONES
+   TRADUCCIONES (añadidas claves para notificaciones y editor)
    ========================================================= */
 const LANG_STORAGE_KEY = 'elcuaderno_lang';
 const translations = {
@@ -835,6 +931,7 @@ const translations = {
     navMuro: 'Muro',
     navExplorar: 'Explorar',
     navActividad: 'Actividad',
+    navNotificaciones: 'Notif.',
     navPerfil: 'Perfil',
     navUsuarios: 'Usuarios',
     navSobreMi: 'Sobre mí',
@@ -892,6 +989,9 @@ const translations = {
     usuariosTitle: 'Usuarios',
     usuariosSub: 'Todos los miembros registrados en el cuaderno.',
     usuariosLoading: 'cargando usuarios…',
+    notificacionesTitle: 'Notificaciones',
+    notificacionesSub: 'Menciones y otras alertas.',
+    notificacionesLoading: 'cargando notificaciones…',
     authTabLogin: 'Iniciar sesión',
     authTabSignup: 'Crear cuenta',
     authLoginTitle: 'Bienvenido de vuelta',
@@ -910,9 +1010,6 @@ const translations = {
     settingsLabelPassword: 'Nueva contraseña (opcional)',
     settingsPlaceholderPassword: 'Déjalo en blanco para no cambiarla',
     settingsSubmitBtn: 'Guardar cambios de cuenta',
-    profileBannerLabel: 'Banner (imagen o color)',
-    profileBannerColorPlaceholder: 'Color hex (ej: #8b7cf0)',
-    profileBannerImage: 'Imagen de banner',
     profileLocationLabel: 'Ubicación',
     profileLocationPlaceholder: 'Ciudad, país…',
     profileWebsiteLabel: 'Sitio web',
@@ -965,6 +1062,12 @@ const translations = {
     msgUserJoined: 'Se unió el {date}',
     msgNoUsers: 'Todavía no hay usuarios registrados.',
     msgOpenVideo: 'Abrir vídeo en nueva pestaña',
+    msgDeletePost: 'Eliminar publicación',
+    msgDeleteConfirm: '¿Seguro que quieres eliminar esta publicación?',
+    msgPostDeleted: 'Publicación eliminada ✓',
+    msgMentionNotification: '{actor} te mencionó en «{title}»',
+    msgNoNotifications: 'No tienes notificaciones.',
+    msgMarkRead: 'Marcar como leída',
   },
   pt: {
     brand: 'o caderno',
@@ -973,6 +1076,7 @@ const translations = {
     navMuro: 'Mural',
     navExplorar: 'Explorar',
     navActividad: 'Atividade',
+    navNotificaciones: 'Notif.',
     navPerfil: 'Perfil',
     navUsuarios: 'Usuários',
     navSobreMi: 'Sobre mim',
@@ -1030,6 +1134,9 @@ const translations = {
     usuariosTitle: 'Usuários',
     usuariosSub: 'Todos os membros registrados no caderno.',
     usuariosLoading: 'carregando usuários…',
+    notificacionesTitle: 'Notificações',
+    notificacionesSub: 'Menções e outros alertas.',
+    notificacionesLoading: 'carregando notificações…',
     authTabLogin: 'Iniciar sessão',
     authTabSignup: 'Criar conta',
     authLoginTitle: 'Bem-vindo de volta',
@@ -1048,9 +1155,6 @@ const translations = {
     settingsLabelPassword: 'Nova senha (opcional)',
     settingsPlaceholderPassword: 'Deixe em branco para não alterar',
     settingsSubmitBtn: 'Salvar alterações da conta',
-    profileBannerLabel: 'Banner (imagem ou cor)',
-    profileBannerColorPlaceholder: 'Cor hex (ex: #8b7cf0)',
-    profileBannerImage: 'Imagem de banner',
     profileLocationLabel: 'Localização',
     profileLocationPlaceholder: 'Cidade, país…',
     profileWebsiteLabel: 'Site',
@@ -1103,6 +1207,12 @@ const translations = {
     msgUserJoined: 'Ingressou em {date}',
     msgNoUsers: 'Ainda não há usuários registrados.',
     msgOpenVideo: 'Abrir vídeo em nova aba',
+    msgDeletePost: 'Excluir publicação',
+    msgDeleteConfirm: 'Tem certeza que deseja excluir esta publicação?',
+    msgPostDeleted: 'Publicação excluída ✓',
+    msgMentionNotification: '{actor} mencionou você em «{title}»',
+    msgNoNotifications: 'Você não tem notificações.',
+    msgMarkRead: 'Marcar como lida',
   },
   en: {
     brand: 'the notebook',
@@ -1111,6 +1221,7 @@ const translations = {
     navMuro: 'Wall',
     navExplorar: 'Explore',
     navActividad: 'Activity',
+    navNotificaciones: 'Notif.',
     navPerfil: 'Profile',
     navUsuarios: 'Users',
     navSobreMi: 'About me',
@@ -1168,6 +1279,9 @@ const translations = {
     usuariosTitle: 'Users',
     usuariosSub: 'All registered members of the notebook.',
     usuariosLoading: 'loading users…',
+    notificacionesTitle: 'Notifications',
+    notificacionesSub: 'Mentions and other alerts.',
+    notificacionesLoading: 'loading notifications…',
     authTabLogin: 'Sign in',
     authTabSignup: 'Create account',
     authLoginTitle: 'Welcome back',
@@ -1186,9 +1300,6 @@ const translations = {
     settingsLabelPassword: 'New password (optional)',
     settingsPlaceholderPassword: 'Leave blank to keep current',
     settingsSubmitBtn: 'Save account changes',
-    profileBannerLabel: 'Banner (image or color)',
-    profileBannerColorPlaceholder: 'Hex color (e.g. #8b7cf0)',
-    profileBannerImage: 'Banner image',
     profileLocationLabel: 'Location',
     profileLocationPlaceholder: 'City, country…',
     profileWebsiteLabel: 'Website',
@@ -1241,6 +1352,12 @@ const translations = {
     msgUserJoined: 'Joined on {date}',
     msgNoUsers: 'No registered users yet.',
     msgOpenVideo: 'Open video in new tab',
+    msgDeletePost: 'Delete post',
+    msgDeleteConfirm: 'Are you sure you want to delete this post?',
+    msgPostDeleted: 'Post deleted ✓',
+    msgMentionNotification: '{actor} mentioned you in «{title}»',
+    msgNoNotifications: 'You have no notifications.',
+    msgMarkRead: 'Mark as read',
   }
 };
 
@@ -1270,6 +1387,7 @@ function applyLanguage() {
   if (document.querySelector('.side-link[data-view="perfil"]')?.classList.contains('active')) renderProfileView();
   if (document.querySelector('.side-link[data-view="sobre-mi"]')?.classList.contains('active')) renderAbout();
   if (document.querySelector('.side-link[data-view="usuarios"]')?.classList.contains('active')) renderUsers();
+  if (document.querySelector('.side-link[data-view="notificaciones"]')?.classList.contains('active')) fetchNotifications();
   renderFeed();
   renderExplore();
   fetchActivity();
@@ -1297,6 +1415,7 @@ document.getElementById('langSelector').addEventListener('click', (e) => {
   if (document.querySelector('.side-link[data-view="perfil"]')?.classList.contains('active')) renderProfileView();
   if (document.querySelector('.side-link[data-view="sobre-mi"]')?.classList.contains('active')) renderAbout();
   if (document.querySelector('.side-link[data-view="usuarios"]')?.classList.contains('active')) renderUsers();
+  if (document.querySelector('.side-link[data-view="notificaciones"]')?.classList.contains('active')) fetchNotifications();
 });
 
 /* =========================================================
@@ -1376,6 +1495,61 @@ function avatarHtml(profile, size){
   return initials(name);
 }
 
+/* sanitización básica de HTML para el editor */
+function sanitizeHtml(html){
+  if (!html) return '';
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  const body = doc.body;
+  const allowed = ['b','i','u','strong','em','p','div','span','br','a','ul','ol','li','blockquote','h1','h2','h3','h4','h5','h6'];
+
+  function cleanNode(node) {
+    if (node.nodeType === Node.TEXT_NODE) return;
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      const tag = node.tagName.toLowerCase();
+      if (!allowed.includes(tag)) {
+        const fragment = document.createDocumentFragment();
+        while (node.firstChild) {
+          const child = node.firstChild;
+          cleanNode(child);
+          fragment.appendChild(child);
+        }
+        node.parentNode.replaceChild(fragment, node);
+        return;
+      }
+      for (let attr of node.attributes) {
+        if (attr.name.startsWith('on') || attr.name === 'srcset' || attr.name === 'srcdoc') {
+          node.removeAttribute(attr.name);
+        }
+      }
+      for (let child of Array.from(node.childNodes)) {
+        cleanNode(child);
+      }
+    }
+  }
+
+  for (let child of Array.from(body.childNodes)) {
+    cleanNode(child);
+  }
+
+  return body.innerHTML;
+}
+
+/* Detectar menciones @usuario en HTML y devolver array de nombres */
+function extractMentions(html){
+  const text = html.replace(/<[^>]+>/g, ' ');
+  const matches = text.match(/@([a-zA-Z0-9_]+)/g);
+  if (!matches) return [];
+  return matches.map(m => m.slice(1));
+}
+
+/* Reemplazar menciones en HTML por enlaces */
+function linkMentions(html){
+  if (!html) return '';
+  return html.replace(/@([a-zA-Z0-9_]+)/g, (match, username) => {
+    return `<a href="#" class="mention-link" data-username="${username}">@${username}</a>`;
+  });
+}
+
 /* =========================================================
    DETECCIÓN DE PLATAFORMAS DE VÍDEO
    ========================================================= */
@@ -1425,6 +1599,7 @@ function goToView(view){
   document.querySelectorAll('section.view').forEach(s => s.classList.toggle('active', s.dataset.viewSection === view));
   if (view === 'explorar') renderExplore();
   if (view === 'actividad') fetchActivity();
+  if (view === 'notificaciones') fetchNotifications();
   if (view === 'perfil') renderProfileView();
   if (view === 'sobre-mi') renderAbout();
   if (view === 'usuarios') renderUsers();
@@ -1682,30 +1857,56 @@ function postCardHtml(p){
   const liked = userLikedPost(p.id);
   const nLikes = likeCountFor(p.id);
   const nComments = commentsFor(p.id).length;
+  const isAuthor = currentUser && p.author_id === currentUser.id;
+  const canDelete = isAuthor || isAdmin;
 
-  // video - SIN sandbox para evitar errores de "Sandboxed embed is not allowed"
-  let videoHtml = '';
-  let videoUrlDirect = p.video_url || null;
-  if (p.video_url) {
-    videoHtml = `<div class="video-embed"><iframe src="${escapeHtml(p.video_url)}" title="${escapeHtml(p.title)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
-  } else if (p.video_platform && p.video_id) {
-    const embed = getEmbedUrl(p.video_platform, p.video_id);
-    if (embed) {
-      videoHtml = `<div class="video-embed"><iframe src="${embed}" title="${escapeHtml(p.title)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
-      if (p.video_platform === 'youtube') videoUrlDirect = `https://www.youtube.com/watch?v=${p.video_id}`;
-      else if (p.video_platform === 'vimeo') videoUrlDirect = `https://vimeo.com/${p.video_id}`;
-      else if (p.video_platform === 'dailymotion') videoUrlDirect = `https://www.dailymotion.com/video/${p.video_id}`;
-      else if (p.video_platform === 'twitch') videoUrlDirect = `https://twitch.tv/${p.video_id}`;
+  // Manejo de video: siempre generar embed a partir de la plataforma detectada
+  let embedUrl = null;
+  let directUrl = null;
+  let detected = null;
+
+  // Primero, si hay video_platform y video_id, usarlos
+  if (p.video_platform && p.video_id) {
+    embedUrl = getEmbedUrl(p.video_platform, p.video_id);
+    // directUrl para "Abrir en nueva pestaña"
+    if (p.video_platform === 'youtube') directUrl = `https://www.youtube.com/watch?v=${p.video_id}`;
+    else if (p.video_platform === 'vimeo') directUrl = `https://vimeo.com/${p.video_id}`;
+    else if (p.video_platform === 'dailymotion') directUrl = `https://www.dailymotion.com/video/${p.video_id}`;
+    else if (p.video_platform === 'twitch') directUrl = `https://twitch.tv/${p.video_id}`;
+    else if (p.video_platform === 'peertube') directUrl = `https://peertube.stream/w/${p.video_id}`;
+    else directUrl = p.video_url || embedUrl;
+  } 
+  // Si no, intentar detectar desde p.video_url
+  else if (p.video_url) {
+    detected = detectVideoPlatform(p.video_url);
+    if (detected) {
+      embedUrl = getEmbedUrl(detected.platform, detected.id);
+      directUrl = p.video_url; // la original
+    } else {
+      // Si no se detecta, usar la URL tal cual (puede fallar)
+      embedUrl = p.video_url;
+      directUrl = p.video_url;
     }
-  } else if (p.youtube_id) {
-    videoHtml = `<div class="video-embed"><iframe src="https://www.youtube-nocookie.com/embed/${p.youtube_id}" title="${escapeHtml(p.title)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
-    videoUrlDirect = `https://www.youtube.com/watch?v=${p.youtube_id}`;
+  }
+  // Si aún no hay embed, pero hay youtube_id (compatibilidad)
+  if (!embedUrl && p.youtube_id) {
+    embedUrl = `https://www.youtube-nocookie.com/embed/${p.youtube_id}`;
+    directUrl = `https://www.youtube.com/watch?v=${p.youtube_id}`;
+  }
+
+  let videoHtml = '';
+  if (embedUrl) {
+    videoHtml = `<div class="video-embed"><iframe src="${embedUrl}" title="${escapeHtml(p.title)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
   }
 
   const authorName = p.author ? escapeHtml(p.author.display_name || p.author.username) : 'anon';
 
+  // contenido con menciones enlazadas
+  let contentHtml = p.content_html || p.content || '';
+  contentHtml = linkMentions(contentHtml);
+
   return `
-    <article class="post" data-cat="${cat}">
+    <article class="post" data-cat="${cat}" data-postid="${p.id}">
       <div class="post-meta">
         <span class="cat-dot ${cat}"></span>
         <span>${p.category || t('msgNoCategory')}</span>
@@ -1716,9 +1917,9 @@ function postCardHtml(p){
       </div>
       <h3>${escapeHtml(p.title)}</h3>
       ${videoHtml}
-      ${videoUrlDirect ? `<div class="video-actions"><a href="${escapeHtml(videoUrlDirect)}" target="_blank" rel="noopener">${t('msgOpenVideo')}</a></div>` : ''}
+      ${directUrl ? `<div class="video-actions"><a href="${directUrl}" target="_blank" rel="noopener">${t('msgOpenVideo')}</a></div>` : ''}
       ${p.image_url ? `<img src="${p.image_url}" loading="lazy" alt="${escapeHtml(p.title)}" />` : ''}
-      <p>${escapeHtml(p.content)}</p>
+      <div class="content-html">${contentHtml}</div>
       <div class="post-actions">
         <button class="action-btn like-btn ${liked ? 'liked':''}" data-post="${p.id}">
           <svg viewBox="0 0 24 24" fill="${liked ? 'currentColor':'none'}" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.35-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6C19 16.65 12 21 12 21z"/></svg>
@@ -1728,6 +1929,11 @@ function postCardHtml(p){
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-8.9 8.4 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7a8.5 8.5 0 0 1-.9-3.8A8.38 8.38 0 0 1 12.5 3a8.5 8.5 0 0 1 8.5 8.5z"/></svg>
           <span class="count">${nComments}</span>
         </button>
+        ${canDelete ? `
+          <button class="action-btn delete-btn" data-post="${p.id}" title="${t('msgDeletePost')}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+          </button>
+        ` : ''}
       </div>
       <div class="comments-panel" id="comments-${p.id}" ${openComments.has(p.id) ? '' : 'hidden'}>
         <div class="comments-list" id="commentsList-${p.id}"></div>
@@ -1772,6 +1978,18 @@ document.getElementById('feed').addEventListener('click', (e)=>{
     viewedProfileId = authorLink.dataset.userid;
     goToView('perfil');
   }
+  // clic en mención
+  const mentionLink = e.target.closest('.mention-link');
+  if (mentionLink) {
+    e.preventDefault();
+    const username = mentionLink.dataset.username;
+    (async ()=>{
+      const { data, error } = await sb.from('profiles').select('id').eq('username', username).single();
+      if (error || !data) { showToast('Usuario no encontrado', true); return; }
+      viewedProfileId = data.id;
+      goToView('perfil');
+    })();
+  }
 });
 
 document.getElementById('filters').addEventListener('click', (e)=>{
@@ -1787,8 +2005,25 @@ document.getElementById('feed').addEventListener('click', async (e)=>{
   const likeBtn = e.target.closest('.like-btn');
   const commentToggle = e.target.closest('.comment-toggle');
   const loginBtn = e.target.closest('.comment-login-btn');
+  const deleteBtn = e.target.closest('.delete-btn');
 
   if (loginBtn){ openAuthModal('login'); return; }
+
+  if (deleteBtn) {
+    const postId = Number(deleteBtn.dataset.post);
+    if (!confirm(t('msgDeleteConfirm'))) return;
+    try {
+      const { error } = await sb.from('posts').delete().eq('id', postId);
+      if (error) throw error;
+      allPosts = allPosts.filter(p => p.id !== postId);
+      showToast(t('msgPostDeleted'));
+      renderFeed();
+      updateStats();
+    } catch(err) {
+      showToast(t('msgErrorPrefix') + err.message, true);
+    }
+    return;
+  }
 
   if (commentToggle){
     const postId = Number(commentToggle.dataset.post);
@@ -1850,7 +2085,7 @@ document.getElementById('feed').addEventListener('submit', async (e)=>{
 });
 
 /* =========================================================
-   ESCRIBIR
+   ESCRIBIR (con editor enriquecido)
    ========================================================= */
 function renderWriteAccess(){
   const card = document.getElementById('writeCard');
@@ -1902,12 +2137,47 @@ document.getElementById('catSelect').addEventListener('click', (e)=>{
   selectedCategory = pill.dataset.cat;
 });
 
+// Editor toolbar
+const editorContent = document.getElementById('editorContent');
+const toolbar = document.getElementById('editorToolbar');
+toolbar.addEventListener('click', (e) => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  const cmd = btn.dataset.cmd;
+  if (cmd === 'createLink') {
+    const url = prompt('Introduce la URL del enlace:', 'https://');
+    if (url) document.execCommand('createLink', false, url);
+    return;
+  }
+  document.execCommand(cmd, false, null);
+});
+
+// Placeholder para editor
+editorContent.addEventListener('focus', () => {
+  if (editorContent.textContent.trim() === t('writePlaceholderContent')) {
+    editorContent.innerHTML = '';
+  }
+});
+editorContent.addEventListener('blur', () => {
+  if (!editorContent.textContent.trim()) {
+    editorContent.innerHTML = t('writePlaceholderContent');
+  }
+});
+// Inicializar placeholder
+editorContent.innerHTML = t('writePlaceholderContent');
+
 document.getElementById('postForm').addEventListener('submit', async (e)=>{
   e.preventDefault();
   const btn = document.getElementById('submitBtn');
   btn.disabled = true; btn.textContent = t('msgSaving');
   try{
     if (!sb || !currentUser) throw new Error('Necesitas iniciar sesión.');
+
+    let html = editorContent.innerHTML;
+    if (html === t('writePlaceholderContent')) html = '';
+    html = sanitizeHtml(html);
+    const content = html;
+
     let imageUrl = null;
     if (selectedFile){
       const path = `${Date.now()}-${selectedFile.name}`;
@@ -1935,9 +2205,10 @@ document.getElementById('postForm').addEventListener('submit', async (e)=>{
       }
     }
 
-    const { error: insertError } = await sb.from('posts').insert([{
+    const { data: postData, error: insertError } = await sb.from('posts').insert([{
       title: document.getElementById('fieldTitle').value.trim(),
-      content: document.getElementById('fieldContent').value.trim(),
+      content: content,
+      content_html: content,
       category: selectedCategory,
       image_url: imageUrl,
       youtube_id: youtubeId,
@@ -1945,8 +2216,29 @@ document.getElementById('postForm').addEventListener('submit', async (e)=>{
       video_id: videoId,
       video_url: videoUrlDirect,
       author_id: currentUser.id
-    }]);
+    }]).select('id').single();
     if (insertError) throw insertError;
+
+    const mentions = extractMentions(content);
+    if (mentions.length > 0) {
+      const { data: profiles, error: profErr } = await sb.from('profiles').select('id, username').in('username', mentions);
+      if (!profErr && profiles) {
+        const postId = postData.id;
+        const actorId = currentUser.id;
+        const postTitle = document.getElementById('fieldTitle').value.trim();
+        for (const p of profiles) {
+          if (p.id === actorId) continue;
+          await sb.from('notifications').insert([{
+            user_id: p.id,
+            actor_id: actorId,
+            post_id: postId,
+            type: 'mention',
+            content: t('msgMentionNotification', { actor: currentUser.username, title: postTitle }),
+            read: false
+          }]);
+        }
+      }
+    }
 
     showToast(t('msgPostPublished'));
     document.getElementById('postForm').reset();
@@ -1954,6 +2246,7 @@ document.getElementById('postForm').addEventListener('submit', async (e)=>{
     document.querySelectorAll('.cat-pill').forEach(p=>p.classList.remove('on'));
     document.querySelector('.cat-pill[data-cat="música"]').classList.add('on');
     selectedCategory = 'música';
+    editorContent.innerHTML = t('writePlaceholderContent');
     goToView('muro');
   } catch(err){
     showToast(t('msgErrorPrefix') + err.message, true);
@@ -2048,6 +2341,64 @@ async function fetchActivity(){
 }
 
 /* =========================================================
+   NOTIFICACIONES
+   ========================================================= */
+let allNotifications = [];
+
+async function fetchNotifications(){
+  const box = document.getElementById('notificationsFeed');
+  box.innerHTML = `<div class="loading">${t('notificacionesLoading')}</div>`;
+  if (!currentUser) {
+    box.innerHTML = `<div class="empty"><div class="icon">🔔</div><div class="big">${t('msgNotLoggedIn')}</div></div>`;
+    return;
+  }
+  try {
+    const { data, error } = await sb.from('notifications')
+      .select('*, actor:profiles!actor_id(username, display_name, avatar_url)')
+      .eq('user_id', currentUser.id)
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+    allNotifications = data || [];
+    renderNotifications();
+  } catch(err) {
+    box.innerHTML = `<div class="empty"><div class="icon">⚠</div><div class="big">${t('msgError')}</div>${escapeHtml(err.message)}</div>`;
+  }
+}
+
+function renderNotifications(){
+  const box = document.getElementById('notificationsFeed');
+  if (allNotifications.length === 0) {
+    box.innerHTML = `<div class="empty"><div class="icon">🔕</div><div class="big">${t('msgNoNotifications')}</div></div>`;
+    return;
+  }
+  box.innerHTML = allNotifications.map(n => {
+    const actorName = n.actor ? escapeHtml(n.actor.display_name || n.actor.username) : 'alguien';
+    const isRead = n.read;
+    return `
+      <div class="notification-item ${isRead ? 'notif-read' : 'notif-unread'}">
+        <div class="notif-icon">💬</div>
+        <div class="notif-text">
+          ${escapeHtml(n.content)}
+          <div class="notif-time">${formatDateTime(n.created_at)}</div>
+        </div>
+        ${!isRead ? `<button class="notif-mark-read" data-notif="${n.id}">${t('msgMarkRead')}</button>` : ''}
+      </div>
+    `;
+  }).join('');
+
+  box.querySelectorAll('.notif-mark-read').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      const id = Number(btn.dataset.notif);
+      try {
+        await sb.from('notifications').update({ read: true }).eq('id', id);
+        allNotifications = allNotifications.map(n => n.id === id ? {...n, read: true} : n);
+        renderNotifications();
+      } catch(err) { showToast(t('msgErrorPrefix') + err.message, true); }
+    });
+  });
+}
+
+/* =========================================================
    USUARIOS
    ========================================================= */
 async function renderUsers(){
@@ -2081,7 +2432,7 @@ async function renderUsers(){
 }
 
 /* =========================================================
-   PERFIL (personalizable con banner)
+   PERFIL (sin banner)
    ========================================================= */
 function renderProfileView(){
   const box = document.getElementById('profileContent');
@@ -2101,12 +2452,8 @@ function renderProfileView(){
   const p = currentProfile;
   if (!p) { box.innerHTML = `<div class="loading">${t('profileLoading')}</div>`; return; }
 
-  const bannerStyle = p.banner_url ? `background-image:url(${p.banner_url});background-size:cover;background-position:center;` :
-                     (p.banner_color ? `background-color:${p.banner_color};` : 'background:linear-gradient(135deg, var(--music), var(--cine));');
-
   box.innerHTML = `
     <div class="profile-card">
-      <div class="profile-banner" style="${bannerStyle}"></div>
       <div class="profile-head">
         <div class="avatar">${avatarHtml(p)}</div>
         <div class="info">
@@ -2134,19 +2481,6 @@ function renderProfileView(){
         <label>${t('profileWebsiteLabel')}</label>
         <input type="url" id="editWebsite" value="${escapeHtml(p.website || '')}" placeholder="${t('profileWebsitePlaceholder')}" maxlength="200" />
 
-        <label>${t('profileBannerLabel')}</label>
-        <div style="display:flex; gap:12px; flex-wrap:wrap;">
-          <div style="flex:1; min-width:120px;">
-            <input type="color" id="editBannerColor" value="${p.banner_color || '#8b7cf0'}" style="width:100%; padding:4px; height:48px;" />
-          </div>
-          <div style="flex:2; min-width:160px;">
-            <div class="dropzone" id="bannerDropzone" style="padding:10px; min-height:50px;">
-              ${p.banner_url ? `<img src="${p.banner_url}" style="max-height:120px; width:auto; margin:0 auto;" />` : `<span style="font-size:12px;">${t('profileBannerImage')}</span>`}
-              <input type="file" id="bannerInput" accept="image/*" style="display:none" />
-            </div>
-          </div>
-        </div>
-
         <label>${t('msgProfileAvatar')}</label>
         <div class="dropzone" id="avatarDropzone">
           ${p.avatar_url ? `<img src="${p.avatar_url}" style="max-height:160px;" />` : `<span>${t('writeDropzoneText')}</span>`}
@@ -2164,10 +2498,6 @@ function renderProfileView(){
   let avatarFile = null;
   document.getElementById('avatarInput').addEventListener('change', (e)=>{ avatarFile = e.target.files[0] || null; });
 
-  document.getElementById('bannerDropzone').addEventListener('click', ()=> document.getElementById('bannerInput').click());
-  let bannerFile = null;
-  document.getElementById('bannerInput').addEventListener('change', (e)=>{ bannerFile = e.target.files[0] || null; });
-
   document.getElementById('saveProfileBtn').addEventListener('click', async ()=>{
     const btn = document.getElementById('saveProfileBtn');
     btn.disabled = true; btn.textContent = t('msgSaving');
@@ -2180,23 +2510,11 @@ function renderProfileView(){
         avatar_url = sb.storage.from(STORAGE_BUCKET).getPublicUrl(path).data.publicUrl;
       }
 
-      let banner_url = p.banner_url || null;
-      if (bannerFile){
-        const path = `banner-${currentUser.id}-${Date.now()}-${bannerFile.name}`;
-        const { error: upErr } = await sb.storage.from(STORAGE_BUCKET).upload(path, bannerFile);
-        if (upErr) throw upErr;
-        banner_url = sb.storage.from(STORAGE_BUCKET).getPublicUrl(path).data.publicUrl;
-      }
-
-      const banner_color = document.getElementById('editBannerColor').value.trim();
-
       const updates = {
         display_name: document.getElementById('editDisplayName').value.trim(),
         bio: document.getElementById('editBio').value.trim(),
         location: document.getElementById('editLocation').value.trim(),
         website: document.getElementById('editWebsite').value.trim(),
-        banner_url: banner_url,
-        banner_color: banner_color,
         avatar_url: avatar_url
       };
       Object.keys(updates).forEach(k => updates[k] === undefined && delete updates[k]);
@@ -2226,12 +2544,8 @@ async function renderPublicProfile(userId){
     const { data: p, error } = await sb.from('profiles').select('*').eq('id', userId).single();
     if (error || !p) throw error || new Error('Usuario no encontrado');
 
-    const bannerStyle = p.banner_url ? `background-image:url(${p.banner_url});background-size:cover;background-position:center;` :
-                       (p.banner_color ? `background-color:${p.banner_color};` : 'background:linear-gradient(135deg, var(--music), var(--cine));');
-
     box.innerHTML = `
       <div class="profile-card">
-        <div class="profile-banner" style="${bannerStyle}"></div>
         <div class="profile-head">
           <div class="avatar">${avatarHtml(p)}</div>
           <div class="info">
@@ -2253,18 +2567,14 @@ async function renderPublicProfile(userId){
 }
 
 /* =========================================================
-   SOBRE MÍ (diseño mejorado sin corte)
+   SOBRE MÍ (sin banner)
    ========================================================= */
 async function renderAbout(){
   const box = document.getElementById('aboutContent');
   const { data: admin } = await sb.from('profiles').select('*').eq('is_admin', true).limit(1).maybeSingle();
 
-  const bannerStyle = admin?.banner_url ? `background-image:url(${admin.banner_url});background-size:cover;background-position:center;` :
-                     (admin?.banner_color ? `background-color:${admin.banner_color};` : 'background:linear-gradient(135deg, var(--music), var(--cine));');
-
   box.innerHTML = `
-    <div class="profile-card profile-no-banner">
-      ${admin ? `<div class="profile-banner" style="${bannerStyle}"></div>` : ''}
+    <div class="profile-card">
       <div class="profile-head">
         <div class="avatar" style="width:80px;height:80px;font-size:32px;">${admin ? avatarHtml(admin) : 'EC'}</div>
         <div class="info">
@@ -2298,6 +2608,15 @@ function subscribeRealtime(){
 
   sb.channel('comments-realtime').on('postgres_changes', { event:'*', schema:'public', table:'comments' }, ()=>{
     fetchPosts();
+  }).subscribe();
+
+  sb.channel('notifications-realtime').on('postgres_changes', { event:'INSERT', schema:'public', table:'notifications' }, (payload)=>{
+    if (currentUser && payload.new.user_id === currentUser.id) {
+      allNotifications.unshift(payload.new);
+      if (document.querySelector('.side-link[data-view="notificaciones"]')?.classList.contains('active')) {
+        renderNotifications();
+      }
+    }
   }).subscribe();
 }
 
