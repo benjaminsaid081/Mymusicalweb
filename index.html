@@ -920,7 +920,7 @@
 (function(){
 
 /* =========================================================
-   TRADUCCIONES (añadidas claves para notificaciones y editor)
+   TRADUCCIONES
    ========================================================= */
 const LANG_STORAGE_KEY = 'elcuaderno_lang';
 const translations = {
@@ -1901,8 +1901,8 @@ function postCardHtml(p){
 
   const authorName = p.author ? escapeHtml(p.author.display_name || p.author.username) : 'anon';
 
-  // contenido con menciones enlazadas
-  let contentHtml = p.content_html || p.content || '';
+  // contenido: usar p.content (que es HTML)
+  let contentHtml = p.content || '';
   contentHtml = linkMentions(contentHtml);
 
   return `
@@ -2176,7 +2176,7 @@ document.getElementById('postForm').addEventListener('submit', async (e)=>{
     let html = editorContent.innerHTML;
     if (html === t('writePlaceholderContent')) html = '';
     html = sanitizeHtml(html);
-    const content = html;
+    const content = html; // guardamos HTML en content
 
     let imageUrl = null;
     if (selectedFile){
@@ -2205,10 +2205,10 @@ document.getElementById('postForm').addEventListener('submit', async (e)=>{
       }
     }
 
+    // Insertar publicación usando la columna 'content'
     const { data: postData, error: insertError } = await sb.from('posts').insert([{
       title: document.getElementById('fieldTitle').value.trim(),
-      content: content,
-      content_html: content,
+      content: content, // <-- solo esta columna
       category: selectedCategory,
       image_url: imageUrl,
       youtube_id: youtubeId,
