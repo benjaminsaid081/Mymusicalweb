@@ -748,8 +748,11 @@
     <!-- ESCRIBIR -->
     <section class="view" data-view-section="escribir">
       <div class="view-inner">
-        <div class="form-card" id="writeCard" style="display:none;">
+        <div class="form-card" id="writeCard">
           <h2 data-i18n="writeTitle">Nueva entrada</h2>
+          <p id="writeAnonymousHint" style="font-size:13px; color:var(--text-dim); margin-top:-10px; margin-bottom:16px;">
+            <span data-i18n="writeAnonymousHintText">Publicarás como Anónimo si no has iniciado sesión.</span>
+          </p>
           <form id="postForm">
             <label data-i18n="writeLabelTitle">Título</label>
             <input type="text" id="fieldTitle" placeholder="" required maxlength="120" data-i18n-placeholder="writePlaceholderTitle" />
@@ -775,6 +778,12 @@
             <div class="editor-content" id="editorContent" contenteditable="true" data-placeholder="Escribe lo que quieras contar…"></div>
             <input type="hidden" id="fieldContent" />
 
+            <!-- Campo de nombre para anónimos -->
+            <div id="anonymousNameField" style="display:none;">
+              <label data-i18n="writeLabelName">Tu nombre (opcional)</label>
+              <input type="text" id="fieldAuthorName" placeholder="" maxlength="60" data-i18n-placeholder="writePlaceholderName" />
+            </div>
+
             <label data-i18n="writeLabelImage">Imagen (opcional)</label>
             <div class="dropzone" id="dropzone">
               <span id="dropzoneText" data-i18n="writeDropzoneText">Haz clic para elegir una imagen</span>
@@ -786,12 +795,6 @@
 
             <button type="submit" class="submit-btn" id="submitBtn" data-i18n="writeSubmitBtn">Publicar</button>
           </form>
-        </div>
-
-        <div class="empty" id="writeLocked">
-          <div class="icon">🔒</div>
-          <div class="big" data-i18n="writeLockedBig">Publicar está reservado</div>
-          <span id="writeLockedMsg" data-i18n="writeLockedMsg">Inicia sesión para saber si puedes publicar aquí.</span>
         </div>
       </div>
     </section>
@@ -961,6 +964,7 @@ const translations = {
     filterCine: 'CINE',
     feedLoading: 'cargando publicaciones…',
     writeTitle: 'Nueva entrada',
+    writeAnonymousHintText: 'Publicarás como Anónimo si no has iniciado sesión.',
     writeLabelTitle: 'Título',
     writePlaceholderTitle: 'Un título para esta entrada',
     writeLabelCategory: 'Categoría',
@@ -969,13 +973,13 @@ const translations = {
     writeCatCine: 'Cine',
     writeLabelContent: 'Contenido',
     writePlaceholderContent: 'Escribe lo que quieras contar…',
+    writeLabelName: 'Tu nombre (opcional)',
+    writePlaceholderName: 'Escribe tu nombre (se mostrará en la publicación)',
     writeLabelImage: 'Imagen (opcional)',
     writeDropzoneText: 'Haz clic para elegir una imagen',
     writeLabelVideo: 'Enlace de vídeo (opcional)',
     writePlaceholderVideo: 'https://youtube.com/watch?v=… o de cualquier plataforma',
     writeSubmitBtn: 'Publicar',
-    writeLockedBig: 'Publicar está reservado',
-    writeLockedMsg: 'Inicia sesión para saber si puedes publicar aquí.',
     exploreTitle: 'Explorar',
     exploreSub: 'Todo el archivo, organizado por pasión.',
     exploreMusicaTitle: 'Música',
@@ -1049,8 +1053,6 @@ const translations = {
     msgTotalEntries: 'Entradas',
     msgLikes: 'likes',
     msgPost: 'Publicar',
-    msgWriteLocked: 'Publicar está reservado',
-    msgWriteLockedSub: 'Inicia sesión para saber si puedes publicar aquí.',
     msgProfileDisplayName: 'Nombre para mostrar',
     msgProfileBio: 'Bio',
     msgProfileAvatar: 'Foto de perfil',
@@ -1106,6 +1108,7 @@ const translations = {
     filterCine: 'CINEMA',
     feedLoading: 'carregando publicações…',
     writeTitle: 'Nova entrada',
+    writeAnonymousHintText: 'Você publicará como Anônimo se não estiver logado.',
     writeLabelTitle: 'Título',
     writePlaceholderTitle: 'Um título para esta entrada',
     writeLabelCategory: 'Categoria',
@@ -1114,13 +1117,13 @@ const translations = {
     writeCatCine: 'Cinema',
     writeLabelContent: 'Conteúdo',
     writePlaceholderContent: 'Escreva o que quiser contar…',
+    writeLabelName: 'Seu nome (opcional)',
+    writePlaceholderName: 'Digite seu nome (será exibido na publicação)',
     writeLabelImage: 'Imagem (opcional)',
     writeDropzoneText: 'Clique para escolher uma imagem',
     writeLabelVideo: 'Link de vídeo (opcional)',
     writePlaceholderVideo: 'https://youtube.com/watch?v=… ou de qualquer plataforma',
     writeSubmitBtn: 'Publicar',
-    writeLockedBig: 'Publicar é reservado',
-    writeLockedMsg: 'Inicie sessão para saber se pode publicar aqui.',
     exploreTitle: 'Explorar',
     exploreSub: 'Todo o arquivo, organizado por paixão.',
     exploreMusicaTitle: 'Música',
@@ -1194,8 +1197,6 @@ const translations = {
     msgTotalEntries: 'Posts',
     msgLikes: 'curtidas',
     msgPost: 'Publicar',
-    msgWriteLocked: 'Publicar é reservado',
-    msgWriteLockedSub: 'Inicie sessão para saber se pode publicar aqui.',
     msgProfileDisplayName: 'Nome para exibir',
     msgProfileBio: 'Bio',
     msgProfileAvatar: 'Foto de perfil',
@@ -1251,6 +1252,7 @@ const translations = {
     filterCine: 'CINEMA',
     feedLoading: 'loading posts…',
     writeTitle: 'New entry',
+    writeAnonymousHintText: 'You will post as Anonymous if you are not signed in.',
     writeLabelTitle: 'Title',
     writePlaceholderTitle: 'A title for this entry',
     writeLabelCategory: 'Category',
@@ -1259,13 +1261,13 @@ const translations = {
     writeCatCine: 'Cinema',
     writeLabelContent: 'Content',
     writePlaceholderContent: 'Write what you want to tell…',
+    writeLabelName: 'Your name (optional)',
+    writePlaceholderName: 'Enter your name (it will appear on the post)',
     writeLabelImage: 'Image (optional)',
     writeDropzoneText: 'Click to choose an image',
     writeLabelVideo: 'Video link (optional)',
     writePlaceholderVideo: 'https://youtube.com/watch?v=… or any platform',
     writeSubmitBtn: 'Publish',
-    writeLockedBig: 'Publishing is reserved',
-    writeLockedMsg: 'Sign in to know if you can post here.',
     exploreTitle: 'Explore',
     exploreSub: 'The entire archive, organized by passion.',
     exploreMusicaTitle: 'Music',
@@ -1339,8 +1341,6 @@ const translations = {
     msgTotalEntries: 'Entries',
     msgLikes: 'likes',
     msgPost: 'Publish',
-    msgWriteLocked: 'Publishing is reserved',
-    msgWriteLockedSub: 'Sign in to know if you can post here.',
     msgProfileDisplayName: 'Display name',
     msgProfileBio: 'Bio',
     msgProfileAvatar: 'Profile picture',
@@ -1397,7 +1397,7 @@ function applyLanguage() {
   renderAuthWidget();
   const settingsEmail = document.getElementById('settingsCurrentEmail');
   if (settingsEmail && currentUser) settingsEmail.textContent = t('msgSettingsCurrent', { email: currentUser.email });
-  renderWriteAccess();
+  toggleAnonymousNameField();
 }
 
 document.getElementById('langSelector').addEventListener('click', (e) => {
@@ -1603,7 +1603,6 @@ function goToView(view){
   if (view === 'perfil') renderProfileView();
   if (view === 'sobre-mi') renderAbout();
   if (view === 'usuarios') renderUsers();
-  if (view === 'escribir') renderWriteAccess();
 }
 document.getElementById('landingGoMuro').addEventListener('click', ()=> goToView('muro'));
 document.getElementById('landingSignup').addEventListener('click', ()=>{
@@ -1616,7 +1615,6 @@ document.getElementById('sideNav').addEventListener('click', (e)=>{
   goToView(btn.dataset.view);
 });
 document.getElementById('writeFab').addEventListener('click', ()=>{
-  if (!currentUser){ openAuthModal('login'); return; }
   goToView('escribir');
 });
 
@@ -1792,6 +1790,25 @@ document.getElementById('settingsForm').addEventListener('submit', async (e)=>{
 });
 
 /* =========================================================
+   FUNCIÓN PARA MOSTRAR/OCULTAR CAMPO DE NOMBRE ANÓNIMO
+   ========================================================= */
+function toggleAnonymousNameField() {
+  const field = document.getElementById('anonymousNameField');
+  if (currentUser) {
+    field.style.display = 'none';
+  } else {
+    field.style.display = 'block';
+  }
+}
+
+// Llamar después de cambios de sesión
+const origRenderAuthWidget = renderAuthWidget;
+renderAuthWidget = function() {
+  origRenderAuthWidget();
+  toggleAnonymousNameField();
+};
+
+/* =========================================================
    MURO / FEED
    ========================================================= */
 function updateStats(){
@@ -1899,7 +1916,15 @@ function postCardHtml(p){
     videoHtml = `<div class="video-embed"><iframe src="${embedUrl}" title="${escapeHtml(p.title)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
   }
 
-  const authorName = p.author ? escapeHtml(p.author.display_name || p.author.username) : 'anon';
+  // Autor: si tiene author, mostrar su nombre; si no, usar author_name o "Anónimo"
+  let authorName = 'Anónimo';
+  let authorId = p.author_id;
+  if (p.author) {
+    authorName = escapeHtml(p.author.display_name || p.author.username);
+  } else if (p.author_name) {
+    authorName = escapeHtml(p.author_name);
+  }
+  // Si el autor es anónimo, no mostramos enlace a perfil (authorId será null)
 
   // contenido: usar p.content (que es HTML)
   let contentHtml = p.content || '';
@@ -1913,7 +1938,7 @@ function postCardHtml(p){
         <span>·</span>
         <span>${formatDateTime(p.created_at)}</span>
         <span>·</span>
-        <span>por <a class="author-link" href="#" data-userid="${p.author_id}">${authorName}</a></span>
+        <span>por ${authorId ? `<a class="author-link" href="#" data-userid="${authorId}">${authorName}</a>` : `<span>${authorName}</span>`}</span>
       </div>
       <h3>${escapeHtml(p.title)}</h3>
       ${videoHtml}
@@ -2085,23 +2110,8 @@ document.getElementById('feed').addEventListener('submit', async (e)=>{
 });
 
 /* =========================================================
-   ESCRIBIR (con editor enriquecido)
+   ESCRIBIR (con editor enriquecido) - siempre visible
    ========================================================= */
-function renderWriteAccess(){
-  const card = document.getElementById('writeCard');
-  const locked = document.getElementById('writeLocked');
-
-  if (currentUser){
-    card.style.display = 'block';
-    locked.style.display = 'none';
-  } else {
-    card.style.display = 'none';
-    locked.style.display = 'block';
-    locked.querySelector('.big').textContent = t('msgWriteLocked');
-    locked.querySelector('span').textContent = t('msgWriteLockedSub');
-  }
-}
-
 const dropzone = document.getElementById('dropzone');
 const fieldImage = document.getElementById('fieldImage');
 let selectedFile = null;
@@ -2171,12 +2181,12 @@ document.getElementById('postForm').addEventListener('submit', async (e)=>{
   const btn = document.getElementById('submitBtn');
   btn.disabled = true; btn.textContent = t('msgSaving');
   try{
-    if (!sb || !currentUser) throw new Error('Necesitas iniciar sesión.');
+    if (!sb) throw new Error('SDK no inicializado.');
 
     let html = editorContent.innerHTML;
     if (html === t('writePlaceholderContent')) html = '';
     html = sanitizeHtml(html);
-    const content = html; // guardamos HTML en content
+    const content = html;
 
     let imageUrl = null;
     if (selectedFile){
@@ -2205,37 +2215,48 @@ document.getElementById('postForm').addEventListener('submit', async (e)=>{
       }
     }
 
-    // Insertar publicación usando la columna 'content'
-    const { data: postData, error: insertError } = await sb.from('posts').insert([{
+    // Insertar publicación
+    const insertData = {
       title: document.getElementById('fieldTitle').value.trim(),
-      content: content, // <-- solo esta columna
+      content: content,
       category: selectedCategory,
       image_url: imageUrl,
       youtube_id: youtubeId,
       video_platform: videoPlatform,
       video_id: videoId,
       video_url: videoUrlDirect,
-      author_id: currentUser.id
-    }]).select('id').single();
+    };
+    if (currentUser) {
+      insertData.author_id = currentUser.id;
+      insertData.author_name = null; // no se usa para usuarios registrados
+    } else {
+      insertData.author_id = null;
+      insertData.author_name = document.getElementById('fieldAuthorName').value.trim() || null;
+    }
+
+    const { data: postData, error: insertError } = await sb.from('posts').insert([insertData]).select('id').single();
     if (insertError) throw insertError;
 
-    const mentions = extractMentions(content);
-    if (mentions.length > 0) {
-      const { data: profiles, error: profErr } = await sb.from('profiles').select('id, username').in('username', mentions);
-      if (!profErr && profiles) {
-        const postId = postData.id;
-        const actorId = currentUser.id;
-        const postTitle = document.getElementById('fieldTitle').value.trim();
-        for (const p of profiles) {
-          if (p.id === actorId) continue;
-          await sb.from('notifications').insert([{
-            user_id: p.id,
-            actor_id: actorId,
-            post_id: postId,
-            type: 'mention',
-            content: t('msgMentionNotification', { actor: currentUser.username, title: postTitle }),
-            read: false
-          }]);
+    // Menciones: solo si hay usuario logueado
+    if (currentUser) {
+      const mentions = extractMentions(content);
+      if (mentions.length > 0) {
+        const { data: profiles, error: profErr } = await sb.from('profiles').select('id, username').in('username', mentions);
+        if (!profErr && profiles) {
+          const postId = postData.id;
+          const actorId = currentUser.id;
+          const postTitle = document.getElementById('fieldTitle').value.trim();
+          for (const p of profiles) {
+            if (p.id === actorId) continue;
+            await sb.from('notifications').insert([{
+              user_id: p.id,
+              actor_id: actorId,
+              post_id: postId,
+              type: 'mention',
+              content: t('msgMentionNotification', { actor: currentUser.username, title: postTitle }),
+              read: false
+            }]);
+          }
         }
       }
     }
@@ -2637,7 +2658,6 @@ async function init(){
       viewedProfileId = null;
       await loadCurrentProfile();
       renderFeed();
-      renderWriteAccess();
       if (document.querySelector('.side-link[data-view="perfil"]')?.classList.contains('active')) renderProfileView();
     });
   }
